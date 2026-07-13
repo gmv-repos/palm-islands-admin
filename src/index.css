@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'poppins';
+    src: url("/fonts/Poppins/Poppins-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Italiana';
+    src: url("/fonts/Italiana/Italiana-Regular.ttf") format('truetype');
+}
+
+.font-palm {
+    font-family: 'Italiana';
+}
+
+* {
+    font-family: 'poppins';
+}
+/* Circle pagination  */
+.custom-swiper .swiper-pagination-bullets {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    gap: 2px;
+  }
+  
+  .custom-swiper .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background-color: #d3d3d3; /* light grey */
+    opacity: 1;
+    border-radius: 9999px; /* fully round */
+    transition: background-color 0.3s ease;
+  }
+  
+  .custom-swiper .swiper-pagination-bullet-active {
+    background-color: #5DAABA; /* Active dot color (matching your theme) */
+  }
+  
+  .modal.fade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    /* Full height for centering */
+  }
+  
+  .modal-dialog {
+    margin: auto;
+    /* Center the modal */
+    max-width: 50%;
+    /* Set max width */
+  }
+  /* Hide the dropdown options (circle, square, etc.) but keep the button */
+  .jodit-ui-group__ul .jodit-toolbar-button__trigger {
+    display: none !important;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .modal-dialog {
+      max-width: 90%;
+      /* Adjust width on smaller screens */
+    }
+  }
+  
+  .jodit-container {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .post-content-wrap{
+    padding: 5px !important ;
+  }  
+  .jodit-editor ul {
+    list-style-type: disc !important;
+    padding-left: 20px !important;
+  }
+  
+  .jodit-editor ol {
+    list-style-type: decimal !important;
+    padding-left: 20px !important;
+  }
+  
+  .jodit-container {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  .post-content-wrap{
+    padding: 5px !important ;
+  }  
+  .jodit-editor ul {
+    list-style-type: disc !important;
+    padding-left: 20px !important;
+  }
+  
+  .jodit-editor ol {
+    list-style-type: decimal !important;
+    padding-left: 20px !important;
+  }
+  

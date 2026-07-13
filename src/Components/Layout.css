@@ -1,0 +1,42 @@
+/* #defaultLayout {
+    display: flex;
+}
+
+.content {
+    margin-left: 200px; Space for the sidebar
+    padding: 10px;
+    transition: margin-left 0.3s ease;
+}
+
+.content.collapsed {
+    margin-left: 50px; Adjust space when sidebar is collapsed
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} */
+/* .TopNavbar{
+    position: fixed !important;
+    width: 100% !important;
+    padding: 10px !important;
+    background-color:aquamarine;
+} */
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #7b7b7b;
+    /* Red color for scrollbar */
+    /* border-radius: 10px; */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ffffff;
+}
+.boxAbsolute{
+    right: 5% !important;
+}

@@ -1,0 +1,54 @@
+.sidebar {
+    width: 200px;
+    background: #4CAF50;
+    height: 100vh;
+    padding: 15px;
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000; */
+    transition: width 0.3s ease;
+}
+.sideNavbar{
+    background-color: #5DAABA !important;
+}
+.sidebar.collapsed {
+    width: 50px; /* Collapsed width */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 20px 0;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+.toggle-button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.sidebar-expanded {
+  width: 12rem; /* same as w-48 in Tailwind */
+  transition: width 0.3s ease;
+}
+.sidebar-collapsed {
+  width: 3.5rem; /* same as w-14 in Tailwind */
+  transition: width 0.3s ease;
+}
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
