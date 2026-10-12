@@ -13,7 +13,6 @@ export default function Login() {
   const { setUser, setToken } = useStateContext();
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); // Set loading to true
