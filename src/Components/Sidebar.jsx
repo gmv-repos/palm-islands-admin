@@ -105,7 +105,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     <div className={` text-white  sideNavbar ${isOpen ? "px-2" : "px-1"}`} style={{ width: isOpen ? 200 : 60  , minHeight:  "100vh"}}>
       <div className="flex justify-between items-center p-2 border-bottom">
         {isOpen &&
-        <h5 className="m-0 text-xl font-palm">Palm Island</h5>
+        <h5 className="m-0 text-xl font-palm">Palm Island Admin</h5>
         // <img src={logo} style={{ width: "45px" }}/>
         }
         <button className="btn btn-sm btn-outline-light" onClick={toggleSidebar}>
