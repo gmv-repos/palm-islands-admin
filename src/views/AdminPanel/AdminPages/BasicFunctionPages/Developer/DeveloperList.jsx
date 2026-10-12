@@ -4,6 +4,60 @@ import { FaPen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Image_Url } from "../../../../../Utils/const";
 import Swal from "sweetalert2";
+import { downloadExcelHeaders } from "../../../../../Utils/export";
+
+const EXCEL_HEADERS = [
+  "name",
+  "slug",
+  "meta_title",
+  "meta_description",
+  "canonical_url",
+  "focus_keyword",
+  "redirect_301",
+  "redirect_302",
+  "old_redirect_url",
+  "schema",
+  "email",
+  "phone_no",
+  "location",
+  "description",
+  "logo",
+  "main_image",
+  "s1_heading",
+  "s1_description",
+  "s1_text",
+  "s2_heading",
+  "s2_description",
+  "s2_image",
+  "s2_images",
+  "s3_heading",
+  "s4_heading",
+  "s4_image",
+  "s4_items",
+  "s5_heading",
+  "s5_sub_heading",
+  "s5_items",
+  "s6_heading",
+  "s6_content",
+  "s6_email",
+  "s6_phone",
+  "s7_heading",
+  "s7_description",
+  "s7_image",
+  "s8_heading",
+  "s8_description",
+  "s8_items",
+  "s9_faqs",
+  "footer_section_title",
+  "footer_section_description",
+  "footer_section_image_alt",
+  "footer_section_image_text",
+  "footer_section_btn_1_text",
+  "footer_section_btn_1_link",
+  "footer_section_btn_2_text",
+  "footer_section_btn_2_link",
+  "footer_section_image_file",
+];
 
 
 const DeveloperList = () => {
@@ -48,39 +102,50 @@ const DeveloperList = () => {
 
     try {
       const res = await axiosClient.post(`/admin/developers/${id}/toggleStatus`);
-      if(res.data.success == true) {
-          Swal.fire({
-            icon: "success",
+      if (res.data.success == true) {
+        Swal.fire({
+          icon: "success",
           //   title: "Success!",
-            text: res.data?.message || "Status Changed Successfully!",
-          });
-                fetchData();
-          } else {
-              Swal.fire({
-            icon: "error",
+          text: res.data?.message || "Status Changed Successfully!",
+        });
+        fetchData();
+      } else {
+        Swal.fire({
+          icon: "error",
           //   title: "Success!",
-            text: res.data?.message || "Status Change Failed",
-          }); 
-          }
+          text: res.data?.message || "Status Change Failed",
+        });
+      }
 
     } catch (err) {
       Swal.fire({
-            icon: "error",
-          //   title: "Success!",
-            text: "Status Change Failed",
-          }); 
+        icon: "error",
+        //   title: "Success!",
+        text: "Status Change Failed",
+      });
     }
   };
 
   return (
     <div className="relative mx-auto p-3" style={{ width: "100%" }}>
       <div
-        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${
-          isOpenModal ? "blur-sm" : "blur-none"
-        }`}
+        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${isOpenModal ? "blur-sm" : "blur-none"
+          }`}
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Developers</h2>
+          <button
+            type="button"
+            onClick={() =>
+              downloadExcelHeaders({
+                headers: EXCEL_HEADERS,
+                filename: "developers_Create_Example_Sheet.xlsx",
+              })
+            }
+            className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+          >
+            Download Excel Example Sheet
+          </button>
         </div>
         {/* <div className="flex justify-end items-center">
           <div className="rounded border border-gray-300 flex items-center p-3 gap-3">
@@ -136,9 +201,8 @@ const DeveloperList = () => {
                     </td> */}
                     <td className="border border-gray-300 p-2">
                       <button
-                        className={`${
-                          data.status === 1 ? "bg-green-500" : "bg-red-500"
-                        } p-2 rounded text-white`}
+                        className={`${data.status === 1 ? "bg-green-500" : "bg-red-500"
+                          } p-2 rounded text-white`}
                         onClick={() => toggleStatus(data.id)}
                       >
                         {data.status === 1 ? "Active" : "In-Active"}

@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import { FaTimes, FaSearch, FaPen, FaTrash } from "react-icons/fa";
 import BlueButtonAdmin from "../../../AdminComponents/Btns/BlueButtonAdmin";
 import axiosClient from "../../../../../axiosClient";
+import { downloadExcelHeaders } from "../../../../../Utils/export";
 // import CategoryModal from "./Category/CategoryModal";
+
+const EXCEL_HEADERS = [
+  "name",
+  "slug",
+  "Meta_title",
+  "Meta_description",
+  "description",
+];
 
 const BlogCat = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -127,20 +136,34 @@ const BlogCat = () => {
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Blog Categories</h2>
-          <div
-            onClick={() => {
-              setIsOpenModal(true);
-              setIsEdit(false);
-              setFormData({
-                name: "",
-                slug: "",
-                Meta_title: "",
-                Meta_description: "",
-                description: "",
-              });
-            }}
-          >
-            <BlueButtonAdmin text="Add Categories" />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                downloadExcelHeaders({
+                  headers: EXCEL_HEADERS,
+                  filename: "blog-categories_Create_Example_Sheet.xlsx",
+                })
+              }
+              className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+            >
+              Download Excel Example Sheet
+            </button>
+            <div
+              onClick={() => {
+                setIsOpenModal(true);
+                setIsEdit(false);
+                setFormData({
+                  name: "",
+                  slug: "",
+                  Meta_title: "",
+                  Meta_description: "",
+                  description: "",
+                });
+              }}
+            >
+              <BlueButtonAdmin text="Add Categories" />
+            </div>
           </div>
         </div>
         {/* <div className="flex justify-end items-center">

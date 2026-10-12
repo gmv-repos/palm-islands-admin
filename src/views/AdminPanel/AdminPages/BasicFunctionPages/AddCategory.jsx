@@ -3,7 +3,10 @@ import { FaTimes, FaSearch, FaPen, FaTrash } from "react-icons/fa";
 import BlueButtonAdmin from "../../AdminComponents/Btns/BlueButtonAdmin";
 import axiosClient from "../../../../axiosClient";
 import Swal from "sweetalert2";
+import { downloadExcelHeaders } from "../../../../Utils/export";
 // import CategoryModal from "./Category/CategoryModal";
+
+const EXCEL_HEADERS = ["name", "slug", "image", "image_alt", "image_text"];
 
 const AddCategory = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -157,17 +160,31 @@ const AddCategory = () => {
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Property Type</h2>
-          <div
-            onClick={() => {
-              setIsOpenModal(true);
-              setIsEdit(false);
-              setFormData({
-                name: "",
-                slug: "",
-              });
-            }}
-          >
-            <BlueButtonAdmin text="Add Categories" />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                downloadExcelHeaders({
+                  headers: EXCEL_HEADERS,
+                  filename: "property-types_Create_Example_Sheet.xlsx",
+                })
+              }
+              className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+            >
+              Download Excel Example Sheet
+            </button>
+            <div
+              onClick={() => {
+                setIsOpenModal(true);
+                setIsEdit(false);
+                setFormData({
+                  name: "",
+                  slug: "",
+                });
+              }}
+            >
+              <BlueButtonAdmin text="Add Categories" />
+            </div>
           </div>
         </div>
         <div>

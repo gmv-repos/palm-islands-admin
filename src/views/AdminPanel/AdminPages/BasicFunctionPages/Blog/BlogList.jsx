@@ -3,6 +3,28 @@ import axiosClient from "../../../../../axiosClient";
 import { FaPen } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { Image_Url } from "../../../../../Utils/const";
+import { downloadExcelHeaders } from "../../../../../Utils/export";
+
+const EXCEL_HEADERS = [
+  "category_id",
+  "tags_id",
+  "title",
+  "image",
+  "short_description",
+  "description_image",
+  "description",
+  "date",
+  "heading",
+  "slug",
+  "meta_title",
+  "meta_description",
+  "canonical_url",
+  "focus_keyword",
+  "redirect_301",
+  "redirect_302",
+  "old_redirect_url",
+  "schema",
+];
 
 
 const BlogList = () => {
@@ -62,6 +84,18 @@ const BlogList = () => {
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Blogs</h2>
+          <button
+            type="button"
+            onClick={() =>
+              downloadExcelHeaders({
+                headers: EXCEL_HEADERS,
+                filename: "blogs_Create_Example_Sheet.xlsx",
+              })
+            }
+            className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+          >
+            Download Excel Example Sheet
+          </button>
         </div>
         {/* <div className="flex justify-end items-center">
           <div className="rounded border border-gray-300 flex items-center p-3 gap-3">
