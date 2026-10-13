@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import axiosClient from "../../../../../../axiosClient";
 import { Image_Url } from "../../../../../../Utils/const";
 import { downloadExcelHeaders } from "../../../../../../Utils/export";
+import UploadExcelButton from "../../../../AdminComponents/Btns/UploadExcelButton";
 
 const EXCEL_HEADERS = [
   "slug",
@@ -78,18 +79,24 @@ const PropertyTypePageList = () => {
       <div className="bg-white flex flex-col gap-10 shadow-md rounded-lg p-6 mb-6">
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Property Type Pages</h2>
-          <button
-            type="button"
-            onClick={() =>
-              downloadExcelHeaders({
-                headers: EXCEL_HEADERS,
-                filename: "property-type-pages_Create_Example_Sheet.xlsx",
-              })
-            }
-            className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
-          >
-            Download Excel Example Sheet
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                downloadExcelHeaders({
+                  headers: EXCEL_HEADERS,
+                  filename: "property-type-pages_Create_Example_Sheet.xlsx",
+                })
+              }
+              className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+            >
+              Download Excel Example Sheet
+            </button>
+            <UploadExcelButton
+              endpoint="/admin/property-type-page/bulk-import"
+              onImported={fetchData}
+            />
+          </div>
         </div>
 
         <div>

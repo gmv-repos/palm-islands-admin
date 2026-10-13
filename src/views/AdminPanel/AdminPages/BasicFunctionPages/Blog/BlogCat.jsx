@@ -3,6 +3,7 @@ import { FaTimes, FaSearch, FaPen, FaTrash } from "react-icons/fa";
 import BlueButtonAdmin from "../../../AdminComponents/Btns/BlueButtonAdmin";
 import axiosClient from "../../../../../axiosClient";
 import { downloadExcelHeaders } from "../../../../../Utils/export";
+import UploadExcelButton from "../../../AdminComponents/Btns/UploadExcelButton";
 // import CategoryModal from "./Category/CategoryModal";
 
 const EXCEL_HEADERS = [
@@ -149,6 +150,10 @@ const BlogCat = () => {
             >
               Download Excel Example Sheet
             </button>
+            <UploadExcelButton
+              endpoint="/admin/blog-category/bulk-import"
+              onImported={fetchCategory}
+            />
             <div
               onClick={() => {
                 setIsOpenModal(true);

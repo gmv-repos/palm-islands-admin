@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaPen } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { downloadExcelHeaders } from "../../../../../Utils/export";
+import UploadExcelButton from "../../../AdminComponents/Btns/UploadExcelButton";
 
 const EXCEL_HEADERS = [
   "page_id",
@@ -86,18 +87,24 @@ const FaqList = () => {
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Faqs</h2>
-          <button
-            type="button"
-            onClick={() =>
-              downloadExcelHeaders({
-                headers: EXCEL_HEADERS,
-                filename: "faqs_Create_Example_Sheet.xlsx",
-              })
-            }
-            className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
-          >
-            Download Excel Example Sheet
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                downloadExcelHeaders({
+                  headers: EXCEL_HEADERS,
+                  filename: "faqs_Create_Example_Sheet.xlsx",
+                })
+              }
+              className="bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit"
+            >
+              Download Excel Example Sheet
+            </button>
+            <UploadExcelButton
+              endpoint="/admin/faqs/bulk-import"
+              onImported={fetchData}
+            />
+          </div>
         </div>
         <div>
           <table className="w-full table-fixed border border-gray-400 p-3 text-sm">

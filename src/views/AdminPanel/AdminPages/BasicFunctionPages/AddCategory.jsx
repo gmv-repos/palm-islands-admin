@@ -4,6 +4,7 @@ import BlueButtonAdmin from "../../AdminComponents/Btns/BlueButtonAdmin";
 import axiosClient from "../../../../axiosClient";
 import Swal from "sweetalert2";
 import { downloadExcelHeaders } from "../../../../Utils/export";
+import UploadExcelButton from "../../AdminComponents/Btns/UploadExcelButton";
 // import CategoryModal from "./Category/CategoryModal";
 
 const EXCEL_HEADERS = ["name", "slug", "image", "image_alt", "image_text"];
@@ -173,6 +174,10 @@ const AddCategory = () => {
             >
               Download Excel Example Sheet
             </button>
+            <UploadExcelButton
+              endpoint="/admin/property-types/bulk-import"
+              onImported={fetchCategory}
+            />
             <div
               onClick={() => {
                 setIsOpenModal(true);
