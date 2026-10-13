@@ -79,9 +79,8 @@ const BlogList = () => {
   return (
     <div className="relative mx-auto p-3" style={{ width: "100%" }}>
       <div
-        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${
-          isOpenModal ? "blur-sm" : "blur-none"
-        }`}
+        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${isOpenModal ? "blur-sm" : "blur-none"
+          }`}
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Blogs</h2>
@@ -99,7 +98,7 @@ const BlogList = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/blogs/bulk-import"
+              endpoint="/admin/blogs/bulk-upload"
               onImported={fetchData}
             />
           </div>
@@ -156,9 +155,8 @@ const BlogList = () => {
                     </td>
                     <td className="border border-gray-300 p-2">
                       <button
-                        className={`${
-                          data.status === 1 ? "bg-green-500" : "bg-red-500"
-                        } p-2 rounded text-white`}
+                        className={`${data.status === 1 ? "bg-green-500" : "bg-red-500"
+                          } p-2 rounded text-white`}
                         onClick={() => toggleStatus(data.id)}
                       >
                         {data.status === 1 ? "Active" : "In-Active"}

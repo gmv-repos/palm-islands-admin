@@ -149,7 +149,7 @@ const DeveloperList = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/developers/bulk-import"
+              endpoint="/admin/developers/bulk-upload"
               onImported={fetchData}
             />
           </div>

@@ -100,11 +100,11 @@ const AddCategory = () => {
       console.log(res);
       if (res.success) {
         console.log(res.message);
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: res.message || "Operation completed successfully",
-      });
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: res.message || "Operation completed successfully",
+        });
         fetchCategory();
         resetForm();
       } else {
@@ -112,29 +112,29 @@ const AddCategory = () => {
       }
       resetForm();
     } catch (err) {
-       const errorData = err.response?.data;
+      const errorData = err.response?.data;
 
-  if (errorData?.error) {
-    // If backend sends field-specific validation errors
-    const errorMessages = Object.values(errorData.error)
-      .flat()
-      .join("\n");
+      if (errorData?.error) {
+        // If backend sends field-specific validation errors
+        const errorMessages = Object.values(errorData.error)
+          .flat()
+          .join("\n");
 
-    Swal.fire({
-      icon: "error",
-      title: errorData.message || "Validation Error",
-      text: errorMessages,
-    });
-  } else {
-    // General error fallback
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text:
-        errorData?.message ||
-        "An error occurred. Please try again later.",
-    });
-  }
+        Swal.fire({
+          icon: "error",
+          title: errorData.message || "Validation Error",
+          text: errorMessages,
+        });
+      } else {
+        // General error fallback
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text:
+            errorData?.message ||
+            "An error occurred. Please try again later.",
+        });
+      }
     }
     // Handle further actions like sending to API
   };
@@ -155,9 +155,8 @@ const AddCategory = () => {
   return (
     <div className="relative mx-auto p-3" style={{ width: "100%" }}>
       <div
-        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${
-          isOpenModal ? "blur-sm" : "blur-none"
-        }`}
+        className={`bg-white flex flex-col gap-10 justify-between shadow-md rounded-lg p-6 mb-6 ${isOpenModal ? "blur-sm" : "blur-none"
+          }`}
       >
         <div className="flex justify-between items-center">
           <h2 className="text-3xl font-bold font-palm">Property Type</h2>
@@ -175,7 +174,7 @@ const AddCategory = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/property-types/bulk-import"
+              endpoint="/admin/property-types/bulk-upload"
               onImported={fetchCategory}
             />
             <div
@@ -212,9 +211,8 @@ const AddCategory = () => {
                     <td className="border border-gray-300 p-2">{data.slug}</td>
                     <td className="border border-gray-300 p-2 flex">
                       <button
-                        className={`${
-                          data.status === true ? "bg-green-500" : "bg-red-500"
-                        } p-2 rounded text-white`}
+                        className={`${data.status === true ? "bg-green-500" : "bg-red-500"
+                          } p-2 rounded text-white`}
                         onClick={() => toggleStatus(data.id)}
                       >
                         {data.status === true ? "Active" : "in-Active"}

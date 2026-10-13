@@ -158,7 +158,7 @@ const Property = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/property/bulk-import"
+              endpoint="/admin/properties/bulk-upload"
               onImported={fetchData}
             />
           </div>

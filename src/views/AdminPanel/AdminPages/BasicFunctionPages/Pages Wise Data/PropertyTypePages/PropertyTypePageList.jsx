@@ -93,7 +93,7 @@ const PropertyTypePageList = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/property-type-page/bulk-import"
+              endpoint="/admin/property-type-page/bulk-upload"
               onImported={fetchData}
             />
           </div>

@@ -30,11 +30,10 @@ function ImportReportModal({ report, activeTab, setActiveTab, onClose }) {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 border-b-2 px-3 py-3 text-sm font-medium transition-colors ${
-                activeTab === tab.key
-                  ? "border-[#5DAABA] text-[#5DAABA]"
-                  : "border-transparent text-slate-500 hover:text-slate-700"
-              }`}
+              className={`flex-1 border-b-2 px-3 py-3 text-sm font-medium transition-colors ${activeTab === tab.key
+                ? "border-[#5DAABA] text-[#5DAABA]"
+                : "border-transparent text-slate-500 hover:text-slate-700"
+                }`}
             >
               {tab.label}
             </button>
@@ -168,9 +167,8 @@ const UploadExcelButton = ({
         type="button"
         disabled={loading}
         onClick={() => fileInputRef.current?.click()}
-        className={`bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit ${
-          loading ? "opacity-60 cursor-not-allowed" : ""
-        } ${className}`}
+        className={`bg-[#5DAABA] border border-[#5DAABA] md:p-2 p-1 md:px-4 px-2 flex justify-center items-center gap-3 cursor-pointer md:text-sm text-xs text-white w-fit ${loading ? "opacity-60 cursor-not-allowed" : ""
+          } ${className}`}
       >
         {loading ? "Uploading..." : buttonLabel}
       </button>

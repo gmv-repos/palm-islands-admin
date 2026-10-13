@@ -101,7 +101,7 @@ const FaqList = () => {
               Download Excel Example Sheet
             </button>
             <UploadExcelButton
-              endpoint="/admin/faqs/bulk-import"
+              endpoint="/admin/faqs/bulk-upload"
               onImported={fetchData}
             />
           </div>
