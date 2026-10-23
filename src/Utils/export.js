@@ -8,6 +8,25 @@ export const downloadExcelHeaders = ({ headers, filename }) => {
   XLSX.writeFile(wb, filename);
 };
 
+export const exportToExcel = ({ data, filename, columns }) => {
+  if (!data || data.length === 0) return false;
+
+  const rows = data.map((row) =>
+    columns.map((col) => {
+      const value = col.get ? col.get(row) : row[col.key];
+      return value === null || value === undefined ? "" : value;
+    })
+  );
+
+  const ws = XLSX.utils.aoa_to_sheet([columns.map((col) => col.label), ...rows]);
+  ws["!cols"] = columns.map((col) => ({ wch: col.width || 22 }));
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+  XLSX.writeFile(wb, filename);
+  return true;
+};
+
 export const exportToCSV = ({ data, filename, columns }) => {
   if (!data || data.length === 0) return;
 
