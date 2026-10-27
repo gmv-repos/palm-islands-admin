@@ -54,22 +54,19 @@ location_section2_description: yup.string().required(),
     .required(),
 
   section_3_title: yup.string().required(),
-  // footer_section_title: yup.string().required("footer section Title is required"),
-  // footer_section_description: yup
-  //   .string()
-  //   .required("footer section Description is required"),
-  // footer_section_btn_1_text: yup.string().required("footer section button 1 text"),
-  // footer_section_btn_1_link: yup.string().required("footer section button 1 link"),
-  // footer_section_btn_2_text: yup.string().required("footer section button 2 text"),
-  // footer_section_btn_2_link: yup.string().required("footer section button 2 link"),
-  // footer_section_image_file: yup
-  //   .mixed().nullable(),
-  // footer_section_image_alt: yup.string().required("footer Section Image Alt is required"),
-  // footer_section_image_text: yup
-  //   .string()
-  //   .required("footer section Image Text is required"),
 
-  // Optional, since they're not in your payload
+  // FAQs
+  faqs: yup
+    .array()
+    .of(
+      yup.object().shape({
+        question: yup.string().required("Question is required"),
+        answer: yup.string().required("Answer is required"),
+      })
+    )
+    .min(1, "At least one FAQ is required")
+    .required("FAQs are required"),
+
   Banner_image: yup.mixed().nullable(),
 });
 
@@ -129,20 +126,35 @@ const PropertyTypePageForm = ({
       section_2_phone: "",
       section_3_title: "",
       location_section_image_text: "",
-      location_section_description : "",
-      location_section_image_file : null ,
+      location_section_description: "",
+      location_section_image_file: null,
       location_section_image_alt: "",
-      location_section_heading : "",
-            location_section2_image_text: "",
-      location_section2_description : "",
-      location_section2_image_file : null ,
+      location_section_heading: "",
+      location_section2_image_text: "",
+      location_section2_description: "",
+      location_section2_image_file: null,
       location_section2_image_alt: "",
-      location_section2_heading : "",
+      location_section2_heading: "",
       Banner_image: null,
+      faqs: [
+        {
+          question: "",
+          answer: "",
+        },
+      ],
     },
   });
 
   const { handleSubmit, reset, control, register, formState } = methods;
+
+  const {
+    fields: faqFields,
+    append: appendFaq,
+    remove: removeFaq,
+  } = useFieldArray({
+    control,
+    name: "faqs",
+  });
 
     const fetchCategory = async () => {
     // setLoading(true);
@@ -163,19 +175,46 @@ const PropertyTypePageForm = ({
 
   useEffect(() => {
     if (editData) {
+      let parsedFaqs = [
+        {
+          question: "",
+          answer: "",
+        },
+      ];
+
+      if (Array.isArray(editData.faqs) && editData.faqs.length > 0) {
+        parsedFaqs = editData.faqs.map((faq) => ({
+          question: faq.question || "",
+          answer: faq.answer || "",
+        }));
+      } else if (typeof editData.faqs === "string" && editData.faqs.trim() !== "") {
+        try {
+          const parsed = JSON.parse(editData.faqs);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            parsedFaqs = parsed.map((faq) => ({
+              question: faq.question || "",
+              answer: faq.answer || "",
+            }));
+          }
+        } catch (e) {
+          console.error("Failed to parse faqs:", e);
+        }
+      }
+
       const formattedData = {
         ...editData,
         schema: editData.schema ? JSON.stringify(editData.schema) : "",
         Banner_image_existing: editData?.Banner_image,
         footer_section_image_file: null,
-                location_section_image_file: null,
-location_section2_image_file: null,
+        location_section_image_file: null,
+        location_section2_image_file: null,
         property_type_id: editData?.property_type_id
-        ? String(editData.property_type_id) // 👈 force string
-        : "",
+          ? String(editData.property_type_id)
+          : "",
         property_locations_name: editData?.property_locations_name
-        ? String(editData.property_locations_name) // 👈 force string
-        : "",
+          ? String(editData.property_locations_name)
+          : "",
+        faqs: parsedFaqs,
       };
       reset(formattedData);
     }
@@ -190,25 +229,30 @@ location_section2_image_file: null,
         formData.append("Banner_image", data.Banner_image[0]);
       }
 
-      // Handle file condition
-      if (data?.footer_section_image_file && data?.footer_section_image_file.length > 0) {
+      if (data?.footer_section_image_file && data.footer_section_image_file instanceof FileList && data.footer_section_image_file.length > 0) {
         formData.append("footer_section_image_file", data.footer_section_image_file[0]);
       }
 
-      if (data.Banner_image && data.Banner_image instanceof FileList && data.Banner_image.length > 0) {
-        formData.append("Banner_image", data.Banner_image[0]);
-      }
-      
-      if (data.location_section_image_file !== null) {
+      if (data.location_section_image_file && data.location_section_image_file instanceof FileList && data.location_section_image_file.length > 0) {
         formData.append("location_section_image_file", data.location_section_image_file[0]);
       }
-      if (data.location_section2_image_file !== null) {
+      if (data.location_section2_image_file && data.location_section2_image_file instanceof FileList && data.location_section2_image_file.length > 0) {
         formData.append("location_section2_image_file", data.location_section2_image_file[0]);
       }
 
       // Handle rest of the fields
-       Object.entries(data).forEach(([key, value]) => {
-        if (key !== "location_section2_image_file" &&  key !== "location_section_image_file" && key !== "Banner_image" && key !== "Banner_image_existing" && key !== "footer_section_image_file") {
+      Object.entries(data).forEach(([key, value]) => {
+        if (
+          key !== "location_section2_image_file" &&
+          key !== "location_section_image_file" &&
+          key !== "Banner_image" &&
+          key !== "Banner_image_existing" &&
+          key !== "footer_section_image_file"
+        ) {
+          if (key === "faqs") {
+            formData.append("faqs", JSON.stringify(value));
+            return;
+          }
           formData.append(key, value);
         }
       });
@@ -551,6 +595,80 @@ location_section2_image_file: null,
         </div>
 
         <hr />
+
+        {/* FAQs Section */}
+        <div className="mt-6">
+          <h3 className="col-span-2 text-xl font-bold mb-4">FAQs</h3>
+
+          {faqFields.map((item, index) => (
+            <div key={item.id} className="border border-gray-200 rounded-lg p-4 mb-6 bg-gray-50">
+              <div className="flex justify-between items-center mb-3">
+                <h4 className="text-lg font-semibold text-gray-700">
+                  FAQ {index + 1}
+                </h4>
+                {faqFields.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeFaq(index)}
+                    className="text-red-500 font-medium hover:underline"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+
+              <div className="flex flex-col mb-4">
+                <label className="mb-1 text-sm font-medium text-gray-700">
+                  Question <span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register(`faqs.${index}.question`)}
+                  placeholder="Enter question"
+                  className={`rounded p-3 border ${
+                    formState.errors?.faqs?.[index]?.question
+                      ? "border-red-500"
+                      : "border-gray-300"
+                  } outline-none`}
+                />
+                {formState.errors?.faqs?.[index]?.question && (
+                  <span className="text-red-500 text-sm mt-1">
+                    {formState.errors?.faqs?.[index]?.question?.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-col">
+                <QuillField
+                  control={control}
+                  name={`faqs.${index}.answer`}
+                  label="Answer"
+                  rules={{ required: "Answer is required" }}
+                />
+                {formState.errors?.faqs?.[index]?.answer && (
+                  <span className="text-red-500 text-sm mt-1">
+                    {formState.errors?.faqs?.[index]?.answer?.message}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={() => appendFaq({ question: "", answer: "" })}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            + Add More FAQ
+          </button>
+
+          {formState.errors?.faqs && typeof formState.errors?.faqs?.message === "string" && (
+            <span className="text-red-500 text-sm mt-2 block">
+              {formState.errors?.faqs?.message}
+            </span>
+          )}
+        </div>
+
+        <hr className="mt-6" />
 
 
         <div className="flex justify-end">

@@ -48,6 +48,7 @@ const EXCEL_HEADERS = [
   "footer_section_btn_1_link",
   "footer_section_btn_2_text",
   "footer_section_btn_2_link",
+  "faqs"
 ];
 
 const PropertyTypePageList = () => {
