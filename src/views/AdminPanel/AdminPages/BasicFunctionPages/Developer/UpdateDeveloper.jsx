@@ -205,34 +205,34 @@ const UpdateDeveloper = () => {
         // Section Items with logos
         s4_items: Array.isArray(editData?.s4_items) && editData.s4_items.length > 0
           ? editData.s4_items.map(item => ({
-            name: item.name,
-            alt: item.logo.alt,
-            alt_name: item.logo?.name,
-            text: item.text,
+            name: item.name || '',
+            alt: item.logo?.alt || '',
+            alt_name: item.logo?.name || '',
+            text: item.text || '',
             file: [],
-            existingPath: item?.logo?.file_path
+            existingPath: item?.logo?.file_path || ''
           }))
           : [],
 
         s5_items: Array.isArray(editData?.s5_items) && editData.s5_items.length > 0
           ? editData.s5_items.map(item => ({
-            name: item.name,
-            alt: item.logo?.alt,
-            alt_name: item.logo?.name,
-            text: item.text,
+            name: item.name || '',
+            alt: item.logo?.alt || '',
+            alt_name: item.logo?.name || '',
+            text: item.text || '',
             file: [],
-            existingPath: item?.logo?.file_path
+            existingPath: item?.logo?.file_path || ''
           }))
           : [],
 
         s8_items: Array.isArray(editData?.s8_items) && editData.s8_items.length > 0
           ? editData.s8_items.map(item => ({
-            name: item.name,
-            alt: item.logo?.alt,
-            alt_name: item.logo?.name,
-            text: item.text,
+            name: item.name || '',
+            alt: item.logo?.alt || '',
+            alt_name: item.logo?.name || '',
+            text: item.text || '',
             file: [],
-            existingPath: item?.logo?.file_path
+            existingPath: item?.logo?.file_path || ''
           }))
           : [],
 
