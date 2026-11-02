@@ -196,6 +196,7 @@ const AddCategory = () => {
             <thead>
               <tr className="bg-[#5DAABA] text-white text-left">
                 <th className="border border-gray-300 p-3">Sno</th>
+                <th className="border border-gray-300 p-3">ID</th>
                 <th className="border border-gray-300 p-3">Name</th>
                 <th className="border border-gray-300 p-3">Slug</th>
                 <th className="border border-gray-300 p-3">Status</th>
@@ -207,6 +208,7 @@ const AddCategory = () => {
                 category.map((data, index) => (
                   <tr key={index}>
                     <td className="border border-gray-300 p-2">{index + 1}</td>
+                    <td className="border border-gray-300 p-2">{data.id}</td>
                     <td className="border border-gray-300 p-2">{data.name}</td>
                     <td className="border border-gray-300 p-2">{data.slug}</td>
                     <td className="border border-gray-300 p-2 flex">
