@@ -96,6 +96,7 @@ const UpdateProperty = () => {
   const [proplocation, setProplocation] = useState([]);
   const [errors, setErrors] = useState({});
   const [isCreating, setIsCreating] = useState(false);
+  const [formReady, setFormReady] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [selectProp, setSelectProp] = useState(null);
   const [formData, setFormData] = useState({
@@ -404,7 +405,7 @@ const UpdateProperty = () => {
 
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "file" ? name == "footer_section_image_file" ?  files : files[0] : value,
+      [name]: type === "file" ? files[0] : value,
     }));
     // console.log("file" , files , formData)
     if (name === "schema") {
@@ -513,6 +514,7 @@ const UpdateProperty = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formReady) return;
     // Check if errors object is empty
     // if (Object.keys(errors).length === 0) {
       const token = localStorage.getItem("ACCESS_TOKEN");
@@ -549,7 +551,7 @@ const UpdateProperty = () => {
         if (formData?.image) {
           formData2.append("image", formData.image);
         }
-        if (formData?.broucher_file) {
+        if (formData.broucher_file instanceof File) {
           formData2.append("broucher_file", formData.broucher_file);
         }
         formData2.append("image_alt", formData.image_alt);
@@ -579,7 +581,7 @@ const UpdateProperty = () => {
               `section_1_options[${index}][description]`,
               item.description
             );
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(`section_1_options[${index}][image]`, item.image);
             } else {
               formData2.append(
@@ -606,10 +608,10 @@ const UpdateProperty = () => {
         formData2.append("footer_section_btn_2_text", formData.footer_section_btn_2_text);
         formData2.append("footer_section_btn_2_link", formData.footer_section_btn_2_link);
 
-        // Append files if exist
-        // if (formData.footer_section_image_file && formData.length > 0) {
+        // Append footer image only if a new file was selected
+        if (formData.footer_section_image_file instanceof File) {
           formData2.append("footer_section_image_file", formData.footer_section_image_file);
-        // }
+        }
 
         //  Section 2
         formData2.append("section_2_heading", formData.section_2_heading);
@@ -633,7 +635,7 @@ const UpdateProperty = () => {
               `section_3_options[${index}][description]`,
               item.description
             );
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(`section_3_options[${index}][image]`, item.image);
             } else {
               formData2.append(
@@ -657,7 +659,7 @@ const UpdateProperty = () => {
         formData2.append("section_4_description", formData.section_4_description);
         if (formData.section_4_interior_images) {
           formData.section_4_interior_images?.forEach((item, index) => {
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(
                 `section_4_interior_images[${index}][image]`,
                 item.image
@@ -680,7 +682,7 @@ const UpdateProperty = () => {
         }
         if (formData.section_4_exterior_images) {
           formData.section_4_exterior_images?.forEach((item, index) => {
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(
                 `section_4_exterior_images[${index}][image]`,
                 item.image
@@ -717,7 +719,7 @@ const UpdateProperty = () => {
         if (formData.section_6_options) {
           formData.section_6_options?.forEach((item, index) => {
             formData2.append(`section_6_options[${index}][text]`, item.text);
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(`section_6_options[${index}][image]`, item.image);
             } else {
               formData2.append(
@@ -757,7 +759,7 @@ const UpdateProperty = () => {
               `section_7_options[${index}][percent]`,
               item.percent
             );
-            if (item?.image) {
+            if (item.image instanceof File) {
               formData2.append(`section_7_options[${index}][image]`, item.image);
             } else {
               formData2.append(
@@ -791,7 +793,7 @@ const UpdateProperty = () => {
               item.floor_plan_image_text
             );
 
-            if (item?.floor_plan_catalogue) {
+            if (item.floor_plan_catalogue instanceof File) {
               formData2.append(
                 `floors[${index}][floor_plan_catalogue]`,
                 item.floor_plan_catalogue
@@ -802,7 +804,7 @@ const UpdateProperty = () => {
                 item.existing_floor_plan_catalogue
               );
             }
-            if (item?.floor_plan_image) {
+            if (item.floor_plan_image instanceof File) {
               formData2.append(
                 `floors[${index}][floor_plan_image]`,
                 item.floor_plan_image
@@ -1100,8 +1102,11 @@ const UpdateProperty = () => {
     } catch { }
   };
   useEffect(() => {
-    fetchCategory();
-    fetchDevelopers();
+    const loadForm = async () => {
+      await Promise.all([fetchCategory(), fetchDevelopers()]);
+      setFormReady(true);
+    };
+    loadForm();
     setProplocation(locationList);
   }, []);
 
@@ -1110,18 +1115,19 @@ const UpdateProperty = () => {
       ...editData,
       property_locations_name: editData?.property_locations_name,
       // section_1_image: [],
-      broucher_file: [],
+      broucher_file: editData?.broucher_file || "",
       image: editData?.image,
       section_2_image: editData?.section_2_image,
       section_5_image: editData?.section_5_image,
       section_7_image: editData?.section_7_image,
-      footer_section_image_file: editData?.footer_section_image_file,
+      footer_section_image_file: editData?.footer_section_image_file || "",
       section_9_image: editData?.section_9_image,
       section_1_options:
         editData?.section_1_options?.map((item) => ({
           heading: item.heading,
           description: item.description,
           image: item.image,
+          existingImage: item.image,
           image_alt: item.image_alt,
           image_text: item.image_text,
         })) || [],
@@ -1129,12 +1135,14 @@ const UpdateProperty = () => {
         heading: item.heading,
         description: item.description,
         image: item.image,
+        existingImage: item.image,
         image_alt: item.image_alt,
         image_text: item.image_text,
       })),
       section_4_interior_images: editData?.section_4_interior_images?.map(
         (item) => ({
           image: item.image,
+          existingImage: item.image,
           image_alt: item.image_alt,
           image_text: item.image_text,
         })
@@ -1142,6 +1150,7 @@ const UpdateProperty = () => {
       section_4_exterior_images: editData?.section_4_exterior_images?.map(
         (item) => ({
           image: item.image,
+          existingImage: item.image,
           image_alt: item.image_alt,
           image_text: item.image_text,
         })
@@ -1149,6 +1158,7 @@ const UpdateProperty = () => {
       section_6_options: editData?.section_6_options?.map((item) => ({
         text: item.text,
         image: item.image,
+        existingImage: item.image,
         image_alt: item.image_alt,
         image_text: item.image_text,
       })),
@@ -1156,6 +1166,7 @@ const UpdateProperty = () => {
         percent: item.percent,
         text: item.text,
         image: item.image,
+        existingImage: item.image,
         image_alt: item.image_alt,
         image_text: item.image_text,
       })),
@@ -1165,6 +1176,7 @@ const UpdateProperty = () => {
         floor_plan_image_text: item.floor_plan_image_text,
         square_feet: item.square_feet,
         existing_floor_plan_catalogue: item.floor_plan_catalogue,
+        existing_floor_plan_image: item.floor_plan_image,
         floor_plan_image: item.floor_plan_image,
       })),
       section_11_faqs: editData?.section_11_faqs?.map((item) => ({
@@ -1454,6 +1466,11 @@ const UpdateProperty = () => {
                       {errors.broucher_file && (
                         <p className="text-red-500 text-sm">
                           {errors.broucher_file}
+                        </p>
+                      )}
+                      {formData.broucher_file && typeof formData.broucher_file === "string" && (
+                        <p className="text-green-600 text-xs">
+                          Current: {formData.broucher_file}
                         </p>
                       )}
                     </div>
@@ -3408,7 +3425,7 @@ const UpdateProperty = () => {
 
             <div className="flex justify-end items-center">
               <div>
-                <BlueButtonAdmin text={isCreating ? "Updating..." : "Update Property"} />
+                <BlueButtonAdmin text={!formReady ? "Loading form..." : isCreating ? "Updating..." : "Update Property"} disabled={!formReady || isCreating} />
               </div>
             </div>
           </div>

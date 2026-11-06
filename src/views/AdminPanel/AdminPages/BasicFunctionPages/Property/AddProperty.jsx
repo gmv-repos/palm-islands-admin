@@ -527,7 +527,9 @@ const AddProperty = () => {
       formData2.append("no_of_bedrooms", formData.no_of_bedrooms);
       formData2.append("register_btn_link", formData.register_btn_link);
       formData2.append("image", formData.image);
-      formData2.append("broucher_file", formData.broucher_file);
+      if (formData.broucher_file instanceof File) {
+        formData2.append("broucher_file", formData.broucher_file);
+      }
       formData2.append("image_alt", formData.image_alt);
       formData2.append("image_text", formData.image_text);
       formData2.append("listing_type", formData.listing_type);
@@ -540,7 +542,9 @@ const AddProperty = () => {
       //  Section 1
       formData2.append("section_1_title", formData.section_1_title);
       formData2.append("section_1_heading", formData.section_1_heading);
-      formData2.append("section_1_image", formData.section_1_image);
+      if (formData.section_1_image instanceof File) {
+        formData2.append("section_1_image", formData.section_1_image);
+      }
       formData2.append("section_1_image_alt", formData.section_1_image_alt);
       formData2.append("section_1_image_text", formData.section_1_image_text);
       if (formData.section_1_options) {
@@ -580,10 +584,8 @@ const AddProperty = () => {
       formData2.append("footer_section_btn_2_text", formData.footer_section_btn_2_text);
       formData2.append("footer_section_btn_2_link", formData.footer_section_btn_2_link);
 
-      // Append files if exist
-      // if (formData.footer_section_image_file && formData.footer_section_image_file[0]) {
-        formData2.append("footer_section_image_file", formData.footer_section_image_file[0]);
-      // }
+      // Footer section image is a URL text field
+      formData2.append("footer_section_image_file", formData.footer_section_image_file || "");
       //  Section 3
       formData2.append("section_3_title", formData.section_3_title);
       formData2.append("section_3_heading", formData.section_3_heading);
@@ -708,18 +710,18 @@ const AddProperty = () => {
             `floors[${index}][floor_plan_image_text]`,
             item.floor_plan_image_text
           );
-          formData2.append(
-            `floors[${index}][floor_plan_image]`,
-            item.floor_plan_image
-          );
-          formData2.append(
-            `floors[${index}][floor_plan_catalogue]`,
-            item.floor_plan_catalogue
-          );
-          formData2.append(
-            `floors[${index}][floor_plan_catalogue]`,
-            item.floor_plan_catalogue
-          );
+          if (item.floor_plan_image) {
+            formData2.append(
+              `floors[${index}][floor_plan_image]`,
+              item.floor_plan_image
+            );
+          }
+          if (item.floor_plan_catalogue instanceof File) {
+            formData2.append(
+              `floors[${index}][floor_plan_catalogue]`,
+              item.floor_plan_catalogue
+            );
+          }
         });
       }
 

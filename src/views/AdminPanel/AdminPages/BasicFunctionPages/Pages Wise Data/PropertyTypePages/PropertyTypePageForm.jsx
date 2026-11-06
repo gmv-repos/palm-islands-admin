@@ -203,6 +203,7 @@ const PropertyTypePageForm = ({
 
       const formattedData = {
         ...editData,
+        slug: (editData.slug || "").trim().replace(/^\/+|\/+$/g, ""),
         schema: editData.schema ? JSON.stringify(editData.schema) : "",
         Banner_image_existing: editData?.Banner_image,
         footer_section_image_file: null,
@@ -222,6 +223,31 @@ const PropertyTypePageForm = ({
 
   const onSubmit = async (data) => {
     try {
+      // D10: Normalize slug - strip trailing/leading slashes to prevent duplicate URLs
+      const normalizedSlug = (data.slug || "").trim().replace(/^\/+|\/+$/g, "");
+      data.slug = normalizedSlug;
+
+      // D10: Check for duplicate slug against existing pages
+      const currentId = editData?.id;
+      try {
+        const checkRes = await axiosClient.post("/admin/property-type-page", {});
+        const existingPages = checkRes.data?.data || [];
+        const isDuplicate = existingPages.some(
+          (page) =>
+            (page.slug || "").replace(/^\/+|\/+$/g, "") === normalizedSlug &&
+            page.id !== currentId
+        );
+        if (isDuplicate) {
+          Swal.fire({
+            icon: "error",
+            text: `A page with slug "${normalizedSlug}" already exists. Please use a unique slug.`,
+          });
+          return;
+        }
+      } catch (checkErr) {
+        console.error("Failed to check duplicate slug:", checkErr);
+      }
+
       const formData = new FormData();
 
       // Handle file condition
