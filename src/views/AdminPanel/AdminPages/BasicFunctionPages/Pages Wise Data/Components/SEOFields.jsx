@@ -11,9 +11,8 @@ const InputField = ({ name, label }) => {
       <input
         {...register(name)}
         placeholder={label}
-        className={`rounded p-3 text-base border ${
-          errors[name] ? "border-red-500" : "border-gray-300"
-        } outline-none`}
+        className={`rounded p-3 text-base border ${errors[name] ? "border-red-500" : "border-gray-300"
+          } outline-none`}
       />
       {errors[name] && (
         <span className="text-red-500 text-sm mt-1">
@@ -27,7 +26,7 @@ const InputField = ({ name, label }) => {
 const SEOFields = () => {
   return (
     <div className="flex flex-wrap gap-5">
-     <div className="flex flex-col w-80">
+      <div className="flex flex-col w-80">
         <label className="mb-1 text-sm font-medium text-gray-700">Slug</label>
         <input
           {...useFormContext().register("slug")}
@@ -37,7 +36,7 @@ const SEOFields = () => {
         {useFormContext().formState.errors.slug && (
           <span className="text-red-500 text-sm mt-1">{useFormContext().formState.errors.slug.message}</span>
         )}
-        <span className="text-gray-400 text-xs mt-1">Trailing/leading slashes are removed automatically.</span>
+        {/* <span className="text-gray-400 text-xs mt-1">Trailing/leading slashes are removed automatically.</span> */}
       </div>
       <InputField name="meta_title" label="Meta Title" />
       <InputField name="meta_description" label="Meta Description" />

@@ -19,14 +19,14 @@ const schema = yup.object().shape({
   property_type_id: yup.string().required("Category is required"),
   slug: yup.string().required(),
   property_locations_name: yup.string().required(),
-      location_section_heading : yup.string().required(),
-location_section_image_file: yup.mixed().nullable(),
-location_section_image_alt : yup.string().required("location Section Image Alt is required"),
-location_section_description: yup.string().required(),
-      location_section2_heading : yup.string().required(),
-location_section2_image_file: yup.mixed().nullable(),
-location_section2_image_alt : yup.string().required("location Section 2 Image Alt is required"),
-location_section2_description: yup.string().required(),
+  location_section_heading: yup.string().required(),
+  location_section_image_file: yup.mixed().nullable(),
+  location_section_image_alt: yup.string().required("location Section Image Alt is required"),
+  location_section_description: yup.string().required(),
+  location_section2_heading: yup.string().required(),
+  location_section2_image_file: yup.mixed().nullable(),
+  location_section2_image_alt: yup.string().required("location Section 2 Image Alt is required"),
+  location_section2_description: yup.string().required(),
 
   meta_title: yup.string().required(),
   meta_description: yup.string().required(),
@@ -78,10 +78,10 @@ const PropertyTypePageForm = ({
   fetchData,
 }) => {
   const navigate = useNavigate();
-    const [propCat, setPropCat] = useState([]);
-    const location = useLocation();
+  const [propCat, setPropCat] = useState([]);
+  const location = useLocation();
   const editData = location.state?.data || null;
-   const locationList = [
+  const locationList = [
     {
       name: "Palm Jumeirah",
       id: "1",
@@ -156,7 +156,7 @@ const PropertyTypePageForm = ({
     name: "faqs",
   });
 
-    const fetchCategory = async () => {
+  const fetchCategory = async () => {
     // setLoading(true);
     try {
       const res = await axiosClient.get("/property-types/active");
@@ -166,12 +166,12 @@ const PropertyTypePageForm = ({
       console.log(err);
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     fetchCategory();
   }, []);
 
 
-      
+
 
   useEffect(() => {
     if (editData) {
@@ -224,8 +224,8 @@ const PropertyTypePageForm = ({
   const onSubmit = async (data) => {
     try {
       // D10: Normalize slug - strip trailing/leading slashes to prevent duplicate URLs
-      const normalizedSlug = (data.slug || "").trim().replace(/^\/+|\/+$/g, "");
-      data.slug = normalizedSlug;
+      // const normalizedSlug = (data.slug || "").trim().replace(/^\/+|\/+$/g, "");
+      // data.slug = normalizedSlug;
 
       // D10: Check for duplicate slug against existing pages
       const currentId = editData?.id;
@@ -319,46 +319,46 @@ const PropertyTypePageForm = ({
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className=" gap-4">
-        <SEOFields/>
+        <SEOFields />
 
-<div className="flex gap-4">
-        {/* Property Type Dropdown */}
-        <div className="flex flex-col my-4 w-1/4">
-          <label className="mb-1 text-sm font-medium text-gray-700">Select Property Type</label>
-          <select
-            {...register("property_type_id")}
-            className={`rounded p-3 border ${formState.errors.property_type_id ? "border-red-500" : "border-gray-300"}`}
-          >
-            <option value="">-- Select Property Type --</option>
-            {propCat.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          {formState.errors.property_type_id && (
-            <span className="text-red-500 text-sm mt-1">{formState.errors.property_type_id.message}</span>
-          )}
-        </div>
+        <div className="flex gap-4">
+          {/* Property Type Dropdown */}
+          <div className="flex flex-col my-4 w-1/4">
+            <label className="mb-1 text-sm font-medium text-gray-700">Select Property Type</label>
+            <select
+              {...register("property_type_id")}
+              className={`rounded p-3 border ${formState.errors.property_type_id ? "border-red-500" : "border-gray-300"}`}
+            >
+              <option value="">-- Select Property Type --</option>
+              {propCat.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {formState.errors.property_type_id && (
+              <span className="text-red-500 text-sm mt-1">{formState.errors.property_type_id.message}</span>
+            )}
+          </div>
 
-         {/* Location Dropdown */}
-        <div className="flex flex-col my-4 w-1/4">
-          <label className="mb-1 text-sm font-medium text-gray-700">Select Location</label>
-          <select
-            {...register("property_locations_name")}
-            className={`rounded p-3 border ${formState.errors.property_locations_name ? "border-red-500" : "border-gray-300"}`}
-          >
-            <option value="">-- Select Locations --</option>
-            {locationList.map((cat) => (
-              <option key={cat.id} value={cat.name}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          {formState.errors.property_locations_name && (
-            <span className="text-red-500 text-sm mt-1">{formState.errors.property_locations_name.message}</span>
-          )}
-        </div>
+          {/* Location Dropdown */}
+          <div className="flex flex-col my-4 w-1/4">
+            <label className="mb-1 text-sm font-medium text-gray-700">Select Location</label>
+            <select
+              {...register("property_locations_name")}
+              className={`rounded p-3 border ${formState.errors.property_locations_name ? "border-red-500" : "border-gray-300"}`}
+            >
+              <option value="">-- Select Locations --</option>
+              {locationList.map((cat) => (
+                <option key={cat.id} value={cat.name}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {formState.errors.property_locations_name && (
+              <span className="text-red-500 text-sm mt-1">{formState.errors.property_locations_name.message}</span>
+            )}
+          </div>
         </div>
 
         {/* Banner Section */}
@@ -377,97 +377,97 @@ const PropertyTypePageForm = ({
           <InputField name="section_1_title" label="Heading" />
         </div>
 
-          <div className="grid col-2 gap-4">
+        <div className="grid col-2 gap-4">
           {/* Section 2 */}
           <h3 className="col-span-2 text-xl font-bold">Section 2</h3>
 
           <InputField name="location_section_heading" label="Heading" />
-            <QuillField
+          <QuillField
             name="location_section_description"
             label="Description"
             control={control}
           />
         </div>
         <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location section Image File
-            </label>
-            <input
-              type="file"
-              {...methods.register("location_section_image_file")}
-            />
-            {methods.formState.errors.location_section_image_file && (
-              <span className="text-red-500 text-sm mt-1">
-                {methods.formState.errors.location_section_image_file.message}
-              </span>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location section Image Alt
-            </label>
-            <input
-              placeholder="Location section image alt"
-              {...methods.register("location_section_image_alt")}
-              className="rounded p-3 border border-gray-300 outline-none"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location Section Image Text
-            </label>
-            <input
-              placeholder="Location section img text"
-              {...methods.register("location_section_image_text")}
-              className="rounded p-3 border border-gray-300 outline-none"
-            />
-          </div>
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location section Image File
+          </label>
+          <input
+            type="file"
+            {...methods.register("location_section_image_file")}
+          />
+          {methods.formState.errors.location_section_image_file && (
+            <span className="text-red-500 text-sm mt-1">
+              {methods.formState.errors.location_section_image_file.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location section Image Alt
+          </label>
+          <input
+            placeholder="Location section image alt"
+            {...methods.register("location_section_image_alt")}
+            className="rounded p-3 border border-gray-300 outline-none"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location Section Image Text
+          </label>
+          <input
+            placeholder="Location section img text"
+            {...methods.register("location_section_image_text")}
+            className="rounded p-3 border border-gray-300 outline-none"
+          />
+        </div>
 
-   <div className="grid col-2 gap-4">
+        <div className="grid col-2 gap-4">
           {/* Section 2 */}
           <h3 className="col-span-2 text-xl font-bold">Section 3</h3>
 
           <InputField name="location_section2_heading" label="Heading" />
-            <QuillField
+          <QuillField
             name="location_section2_description"
             label="Description"
             control={control}
           />
         </div>
         <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location section Image File
-            </label>
-            <input
-              type="file"
-              {...methods.register("location_section2_image_file")}
-            />
-            {methods.formState.errors.location_section2_image_file && (
-              <span className="text-red-500 text-sm mt-1">
-                {methods.formState.errors.location_section2_image_file.message}
-              </span>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location section Image Alt
-            </label>
-            <input
-              placeholder="Location section image alt"
-              {...methods.register("location_section2_image_alt")}
-              className="rounded p-3 border border-gray-300 outline-none"
-            />
-          </div>
-          <div className="flex flex-col">
-            <label className="mb-1 text-sm font-medium text-gray-700">
-              Location Section Image Text
-            </label>
-            <input
-              placeholder="Location section img text"
-              {...methods.register("location_section2_image_text")}
-              className="rounded p-3 border border-gray-300 outline-none"
-            />
-          </div>
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location section Image File
+          </label>
+          <input
+            type="file"
+            {...methods.register("location_section2_image_file")}
+          />
+          {methods.formState.errors.location_section2_image_file && (
+            <span className="text-red-500 text-sm mt-1">
+              {methods.formState.errors.location_section2_image_file.message}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location section Image Alt
+          </label>
+          <input
+            placeholder="Location section image alt"
+            {...methods.register("location_section2_image_alt")}
+            className="rounded p-3 border border-gray-300 outline-none"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="mb-1 text-sm font-medium text-gray-700">
+            Location Section Image Text
+          </label>
+          <input
+            placeholder="Location section img text"
+            {...methods.register("location_section2_image_text")}
+            className="rounded p-3 border border-gray-300 outline-none"
+          />
+        </div>
 
 
 
@@ -650,11 +650,10 @@ const PropertyTypePageForm = ({
                 <input
                   {...register(`faqs.${index}.question`)}
                   placeholder="Enter question"
-                  className={`rounded p-3 border ${
-                    formState.errors?.faqs?.[index]?.question
+                  className={`rounded p-3 border ${formState.errors?.faqs?.[index]?.question
                       ? "border-red-500"
                       : "border-gray-300"
-                  } outline-none`}
+                    } outline-none`}
                 />
                 {formState.errors?.faqs?.[index]?.question && (
                   <span className="text-red-500 text-sm mt-1">
