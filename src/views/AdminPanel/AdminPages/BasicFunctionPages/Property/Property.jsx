@@ -20,6 +20,7 @@ const EXCEL_HEADERS = [
   "canonical_url",
   "developer_id",
   "property_types_id",
+  "property_types",
   "property_locations_name",
   "square_feet",
   "price",

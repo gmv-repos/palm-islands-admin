@@ -9,6 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import MultiSelect from "../../../AdminComponents/Inputs/MultiSelect";
+import { propertyTypes } from "./propertyTypes";
 
 const validationSchema = yup.object({
   schema: yup
@@ -116,6 +118,7 @@ const UpdateProperty = () => {
     schema: "", //seo
     developer_id: "",
     property_types_id: "",
+    property_types: [],
     property_locations_name: "",
     property_locations_id: 0,
     square_feet: "",
@@ -272,6 +275,7 @@ const UpdateProperty = () => {
       section_10_description: "",
       developer_id: "",
       property_types_id: "",
+      property_types: [],
       property_locations_name: "",
       property_locations_id: 0,
       square_feet: "",
@@ -517,338 +521,344 @@ const UpdateProperty = () => {
     if (!formReady) return;
     // Check if errors object is empty
     // if (Object.keys(errors).length === 0) {
-      const token = localStorage.getItem("ACCESS_TOKEN");
-      if (!token) {
-        alert("No access token found");
-        return;
+    const token = localStorage.getItem("ACCESS_TOKEN");
+    if (!token) {
+      alert("No access token found");
+      return;
+    }
+    try {
+      const formData2 = new FormData();
+      console.log(formData.property_locations_name);
+      //  Basic fields
+      formData2.append("name", formData?.name);
+      formData2.append("slug", formData.slug);
+      formData2.append("short_description", formData.short_description);
+      formData2.append("meta_title", formData.meta_title);
+      formData2.append("focus_keyword", formData.focus_keyword);
+      formData2.append("redirect_301", formData.redirect_301);
+      formData2.append("redirect_302", formData.redirect_302);
+      formData2.append("old_redirect_url", formData.old_redirect_url);
+      formData2.append("schema", formData.schema);
+      formData2.append("meta_description", formData.meta_description);
+      formData2.append("canonical_url", formData.canonical_url);
+      formData2.append("developer_id", formData.developer_id);
+      formData2.append("property_types_id", formData.property_types_id);
+      formData2.append(
+        "property_types",
+        Array.isArray(formData.property_types)
+          ? formData.property_types.filter(Boolean).join(",")
+          : formData.property_types || ""
+      );
+      formData2.append(
+        "property_locations_name",
+        formData.property_locations_name
+      );
+      formData2.append("property_locations_id", formData.property_locations_id);
+      formData2.append("square_feet", formData.square_feet);
+      formData2.append("price", formData.price);
+      formData2.append("no_of_bedrooms", formData.no_of_bedrooms);
+      formData2.append("register_btn_link", formData.register_btn_link);
+      if (formData?.image) {
+        formData2.append("image", formData.image);
       }
-      try {
-        const formData2 = new FormData();
-        console.log(formData.property_locations_name);
-        //  Basic fields
-        formData2.append("name", formData?.name);
-        formData2.append("slug", formData.slug);
-        formData2.append("short_description", formData.short_description);
-        formData2.append("meta_title", formData.meta_title);
-        formData2.append("focus_keyword", formData.focus_keyword);
-        formData2.append("redirect_301", formData.redirect_301);
-        formData2.append("redirect_302", formData.redirect_302);
-        formData2.append("old_redirect_url", formData.old_redirect_url);
-        formData2.append("schema", formData.schema);
-        formData2.append("meta_description", formData.meta_description);
-        formData2.append("canonical_url", formData.canonical_url);
-        formData2.append("developer_id", formData.developer_id);
-        formData2.append("property_types_id", formData.property_types_id);
-        formData2.append(
-          "property_locations_name",
-          formData.property_locations_name
-        );
-        formData2.append("property_locations_id", formData.property_locations_id);
-        formData2.append("square_feet", formData.square_feet);
-        formData2.append("price", formData.price);
-        formData2.append("no_of_bedrooms", formData.no_of_bedrooms);
-        formData2.append("register_btn_link", formData.register_btn_link);
-        if (formData?.image) {
-          formData2.append("image", formData.image);
-        }
-        if (formData.broucher_file instanceof File) {
-          formData2.append("broucher_file", formData.broucher_file);
-        }
-        formData2.append("image_alt", formData.image_alt);
-        formData2.append("image_text", formData.image_text);
-        formData2.append("listing_type", formData.listing_type || "");
-        formData2.append("handover", formData.handover || "");
-        formData2.append("payment_plan", formData.payment_plan || "");
-        formData2.append("frond", formData.frond || "");
-        formData2.append("villa_type", formData.villa_type || "");
-        formData2.append("property_feature", formData.property_feature || "");
+      if (formData.broucher_file instanceof File) {
+        formData2.append("broucher_file", formData.broucher_file);
+      }
+      formData2.append("image_alt", formData.image_alt);
+      formData2.append("image_text", formData.image_text);
+      formData2.append("listing_type", formData.listing_type || "");
+      formData2.append("handover", formData.handover || "");
+      formData2.append("payment_plan", formData.payment_plan || "");
+      formData2.append("frond", formData.frond || "");
+      formData2.append("villa_type", formData.villa_type || "");
+      formData2.append("property_feature", formData.property_feature || "");
 
-        //  Section 1
-        formData2.append("section_1_title", formData.section_1_title);
-        formData2.append("section_1_heading", formData.section_1_heading);
-        if(formData?.section_1_image){
-          formData2.append("section_1_image", formData.section_1_image);
-        }
-        formData2.append("section_1_image_alt", formData.section_1_image_alt);
-        formData2.append("section_1_image_text", formData.section_1_image_text);
-        if (formData.section_1_options) {
-          formData.section_1_options?.forEach((item, index) => {
+      //  Section 1
+      formData2.append("section_1_title", formData.section_1_title);
+      formData2.append("section_1_heading", formData.section_1_heading);
+      if (formData?.section_1_image) {
+        formData2.append("section_1_image", formData.section_1_image);
+      }
+      formData2.append("section_1_image_alt", formData.section_1_image_alt);
+      formData2.append("section_1_image_text", formData.section_1_image_text);
+      if (formData.section_1_options) {
+        formData.section_1_options?.forEach((item, index) => {
+          formData2.append(
+            `section_1_options[${index}][heading]`,
+            item.heading
+          );
+          formData2.append(
+            `section_1_options[${index}][description]`,
+            item.description
+          );
+          if (item.image instanceof File) {
+            formData2.append(`section_1_options[${index}][image]`, item.image);
+          } else {
             formData2.append(
-              `section_1_options[${index}][heading]`,
-              item.heading
+              `section_1_options[${index}][existingImage]`,
+              item.existingImage
             );
-            formData2.append(
-              `section_1_options[${index}][description]`,
-              item.description
-            );
-            if (item.image instanceof File) {
-              formData2.append(`section_1_options[${index}][image]`, item.image);
-            } else {
-              formData2.append(
-                `section_1_options[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-            formData2.append(
-              `section_1_options[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_1_options[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-        formData2.append("footer_section_title", formData.footer_section_title);
-        formData2.append("footer_section_description", formData.footer_section_description);
-        formData2.append("footer_section_image_alt", formData.footer_section_image_alt);
-        formData2.append("footer_section_image_text", formData.footer_section_image_text);
-        formData2.append("footer_section_btn_1_text", formData.footer_section_btn_1_text);
-        formData2.append("footer_section_btn_1_link", formData.footer_section_btn_1_link);
-        formData2.append("footer_section_btn_2_text", formData.footer_section_btn_2_text);
-        formData2.append("footer_section_btn_2_link", formData.footer_section_btn_2_link);
-
-        // Append footer image only if a new file was selected
-        if (formData.footer_section_image_file instanceof File) {
-          formData2.append("footer_section_image_file", formData.footer_section_image_file);
-        }
-
-        //  Section 2
-        formData2.append("section_2_heading", formData.section_2_heading);
-        formData2.append("section_2_description", formData.section_2_description);
-        if (formData?.section_2_image) {
-          formData2.append("section_2_image", formData.section_2_image);
-        }
-        formData2.append("section_2_image_alt", formData.section_2_image_alt);
-        formData2.append("section_2_image_text", formData.section_2_image_text);
-
-        //  Section 3
-        formData2.append("section_3_title", formData.section_3_title);
-        formData2.append("section_3_heading", formData.section_3_heading);
-        if (formData.section_3_options) {
-          formData.section_3_options?.forEach((item, index) => {
-            formData2.append(
-              `section_3_options[${index}][heading]`,
-              item.heading
-            );
-            formData2.append(
-              `section_3_options[${index}][description]`,
-              item.description
-            );
-            if (item.image instanceof File) {
-              formData2.append(`section_3_options[${index}][image]`, item.image);
-            } else {
-              formData2.append(
-                `section_3_options[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-            formData2.append(
-              `section_3_options[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_3_options[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-
-        // Section 4
-        formData2.append("section_4_heading", formData.section_4_heading);
-        formData2.append("section_4_description", formData.section_4_description);
-        if (formData.section_4_interior_images) {
-          formData.section_4_interior_images?.forEach((item, index) => {
-            if (item.image instanceof File) {
-              formData2.append(
-                `section_4_interior_images[${index}][image]`,
-                item.image
-              );
-            } else {
-              formData2.append(
-                `section_4_interior_images[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-            formData2.append(
-              `section_4_interior_images[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_4_interior_images[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-        if (formData.section_4_exterior_images) {
-          formData.section_4_exterior_images?.forEach((item, index) => {
-            if (item.image instanceof File) {
-              formData2.append(
-                `section_4_exterior_images[${index}][image]`,
-                item.image
-              );
-            } else {
-              formData2.append(
-                `section_4_exterior_images[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-
-            formData2.append(
-              `section_4_exterior_images[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_4_exterior_images[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-
-        // Section 5
-        formData2.append("section_5_heading", formData.section_5_heading);
-        formData2.append("section_5_description", formData.section_5_description);
-        if (formData?.section_5_image) {
-          formData2.append("section_5_image", formData.section_5_image);
-        }
-        formData2.append("section_5_image_alt", formData.section_5_image_alt);
-        formData2.append("section_5_image_text", formData.section_5_image_text);
-
-        // Section 6
-        formData2.append("section_6_heading", formData.section_6_heading);
-        if (formData.section_6_options) {
-          formData.section_6_options?.forEach((item, index) => {
-            formData2.append(`section_6_options[${index}][text]`, item.text);
-            if (item.image instanceof File) {
-              formData2.append(`section_6_options[${index}][image]`, item.image);
-            } else {
-              formData2.append(
-                `section_6_options[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-            formData2.append(
-              `section_6_options[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_6_options[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-
-        //setion 10 
-
-        formData2.append("section_10_heading", formData.section_10_heading);
-        formData2.append("section_10_description", formData.section_10_description);
-
-        // Section 7
-        formData2.append("section_7_heading", formData.section_7_heading);
-        formData2.append("section_7_description", formData.section_7_description);
-
-        if (formData?.section_7_image) {
-          formData2.append("section_7_image", formData.section_7_image);
-        }
-        formData2.append("section_7_image_alt", formData.section_7_image_alt);
-        formData2.append("section_7_image_text", formData.section_7_image_text);
-        if (formData.section_7_options) {
-          formData.section_7_options?.forEach((item, index) => {
-            formData2.append(`section_7_options[${index}][text]`, item.text);
-            formData2.append(
-              `section_7_options[${index}][percent]`,
-              item.percent
-            );
-            if (item.image instanceof File) {
-              formData2.append(`section_7_options[${index}][image]`, item.image);
-            } else {
-              formData2.append(
-                `section_7_options[${index}][existingImage]`,
-                item.existingImage
-              );
-            }
-            formData2.append(
-              `section_7_options[${index}][image_alt]`,
-              item.image_alt
-            );
-            formData2.append(
-              `section_7_options[${index}][image_text]`,
-              item.image_text
-            );
-          });
-        }
-
-        //Section 8
-        formData2.append("section_8_heading", formData.section_8_heading);
-        if (formData.floors) {
-          formData.floors?.forEach((item, index) => {
-            formData2.append(`floors[${index}][floor_number]`, item.floor_number);
-            formData2.append(`floors[${index}][square_feet]`, item.square_feet);
-            formData2.append(
-              `floors[${index}][floor_plan_image_alt]`,
-              item.floor_plan_image_alt
-            );
-            formData2.append(
-              `floors[${index}][floor_plan_image_text]`,
-              item.floor_plan_image_text
-            );
-
-            if (item.floor_plan_catalogue instanceof File) {
-              formData2.append(
-                `floors[${index}][floor_plan_catalogue]`,
-                item.floor_plan_catalogue
-              );
-            } else {
-              formData2.append(
-                `floors[${index}][existing_floor_plan_catalogue]`,
-                item.existing_floor_plan_catalogue
-              );
-            }
-            if (item.floor_plan_image instanceof File) {
-              formData2.append(
-                `floors[${index}][floor_plan_image]`,
-                item.floor_plan_image
-              );
-            } else {
-              formData2.append(
-                `floors[${index}][existing_floor_plan_image]`,
-                item.existing_floor_plan_image
-              );
-            }
-          });
-        }
-
-        // Section 9
-        formData2.append("section_9_heading", formData.section_9_heading);
-        formData2.append("section_9_description", formData.section_9_description);
-        formData2.append("section_9_image", formData.section_9_image);
-        formData2.append("section_9_image_alt", formData.section_9_image_alt);
-        formData2.append("section_9_image_text", formData.section_9_image_text);
-
-        // Section 11
-
-        if (formData.section_11_faqs) {
-          formData.section_11_faqs?.forEach((faq, index) => {
-            formData2.append(`section_11_faqs[${index}][question]`, faq.question);
-            formData2.append(`section_11_faqs[${index}][ans]`, faq.ans);
-          });
-        }
-        setIsCreating(true);
-
-        const response = await axiosClient.post(
-          `/admin/property/${editData.id}/update`,
-          formData2,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
           }
-        );
-        const res = response.data;
-        console.log(res);
+          formData2.append(
+            `section_1_options[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_1_options[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+      formData2.append("footer_section_title", formData.footer_section_title);
+      formData2.append("footer_section_description", formData.footer_section_description);
+      formData2.append("footer_section_image_alt", formData.footer_section_image_alt);
+      formData2.append("footer_section_image_text", formData.footer_section_image_text);
+      formData2.append("footer_section_btn_1_text", formData.footer_section_btn_1_text);
+      formData2.append("footer_section_btn_1_link", formData.footer_section_btn_1_link);
+      formData2.append("footer_section_btn_2_text", formData.footer_section_btn_2_text);
+      formData2.append("footer_section_btn_2_link", formData.footer_section_btn_2_link);
 
-        if (res.status == true) {
+      // Append footer image only if a new file was selected
+      if (formData.footer_section_image_file instanceof File) {
+        formData2.append("footer_section_image_file", formData.footer_section_image_file);
+      }
+
+      //  Section 2
+      formData2.append("section_2_heading", formData.section_2_heading);
+      formData2.append("section_2_description", formData.section_2_description);
+      if (formData?.section_2_image) {
+        formData2.append("section_2_image", formData.section_2_image);
+      }
+      formData2.append("section_2_image_alt", formData.section_2_image_alt);
+      formData2.append("section_2_image_text", formData.section_2_image_text);
+
+      //  Section 3
+      formData2.append("section_3_title", formData.section_3_title);
+      formData2.append("section_3_heading", formData.section_3_heading);
+      if (formData.section_3_options) {
+        formData.section_3_options?.forEach((item, index) => {
+          formData2.append(
+            `section_3_options[${index}][heading]`,
+            item.heading
+          );
+          formData2.append(
+            `section_3_options[${index}][description]`,
+            item.description
+          );
+          if (item.image instanceof File) {
+            formData2.append(`section_3_options[${index}][image]`, item.image);
+          } else {
+            formData2.append(
+              `section_3_options[${index}][existingImage]`,
+              item.existingImage
+            );
+          }
+          formData2.append(
+            `section_3_options[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_3_options[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+
+      // Section 4
+      formData2.append("section_4_heading", formData.section_4_heading);
+      formData2.append("section_4_description", formData.section_4_description);
+      if (formData.section_4_interior_images) {
+        formData.section_4_interior_images?.forEach((item, index) => {
+          if (item.image instanceof File) {
+            formData2.append(
+              `section_4_interior_images[${index}][image]`,
+              item.image
+            );
+          } else {
+            formData2.append(
+              `section_4_interior_images[${index}][existingImage]`,
+              item.existingImage
+            );
+          }
+          formData2.append(
+            `section_4_interior_images[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_4_interior_images[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+      if (formData.section_4_exterior_images) {
+        formData.section_4_exterior_images?.forEach((item, index) => {
+          if (item.image instanceof File) {
+            formData2.append(
+              `section_4_exterior_images[${index}][image]`,
+              item.image
+            );
+          } else {
+            formData2.append(
+              `section_4_exterior_images[${index}][existingImage]`,
+              item.existingImage
+            );
+          }
+
+          formData2.append(
+            `section_4_exterior_images[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_4_exterior_images[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+
+      // Section 5
+      formData2.append("section_5_heading", formData.section_5_heading);
+      formData2.append("section_5_description", formData.section_5_description);
+      if (formData?.section_5_image) {
+        formData2.append("section_5_image", formData.section_5_image);
+      }
+      formData2.append("section_5_image_alt", formData.section_5_image_alt);
+      formData2.append("section_5_image_text", formData.section_5_image_text);
+
+      // Section 6
+      formData2.append("section_6_heading", formData.section_6_heading);
+      if (formData.section_6_options) {
+        formData.section_6_options?.forEach((item, index) => {
+          formData2.append(`section_6_options[${index}][text]`, item.text);
+          if (item.image instanceof File) {
+            formData2.append(`section_6_options[${index}][image]`, item.image);
+          } else {
+            formData2.append(
+              `section_6_options[${index}][existingImage]`,
+              item.existingImage
+            );
+          }
+          formData2.append(
+            `section_6_options[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_6_options[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+
+      //setion 10 
+
+      formData2.append("section_10_heading", formData.section_10_heading);
+      formData2.append("section_10_description", formData.section_10_description);
+
+      // Section 7
+      formData2.append("section_7_heading", formData.section_7_heading);
+      formData2.append("section_7_description", formData.section_7_description);
+
+      if (formData?.section_7_image) {
+        formData2.append("section_7_image", formData.section_7_image);
+      }
+      formData2.append("section_7_image_alt", formData.section_7_image_alt);
+      formData2.append("section_7_image_text", formData.section_7_image_text);
+      if (formData.section_7_options) {
+        formData.section_7_options?.forEach((item, index) => {
+          formData2.append(`section_7_options[${index}][text]`, item.text);
+          formData2.append(
+            `section_7_options[${index}][percent]`,
+            item.percent
+          );
+          if (item.image instanceof File) {
+            formData2.append(`section_7_options[${index}][image]`, item.image);
+          } else {
+            formData2.append(
+              `section_7_options[${index}][existingImage]`,
+              item.existingImage
+            );
+          }
+          formData2.append(
+            `section_7_options[${index}][image_alt]`,
+            item.image_alt
+          );
+          formData2.append(
+            `section_7_options[${index}][image_text]`,
+            item.image_text
+          );
+        });
+      }
+
+      //Section 8
+      formData2.append("section_8_heading", formData.section_8_heading);
+      if (formData.floors) {
+        formData.floors?.forEach((item, index) => {
+          formData2.append(`floors[${index}][floor_number]`, item.floor_number);
+          formData2.append(`floors[${index}][square_feet]`, item.square_feet);
+          formData2.append(
+            `floors[${index}][floor_plan_image_alt]`,
+            item.floor_plan_image_alt
+          );
+          formData2.append(
+            `floors[${index}][floor_plan_image_text]`,
+            item.floor_plan_image_text
+          );
+
+          if (item.floor_plan_catalogue instanceof File) {
+            formData2.append(
+              `floors[${index}][floor_plan_catalogue]`,
+              item.floor_plan_catalogue
+            );
+          } else {
+            formData2.append(
+              `floors[${index}][existing_floor_plan_catalogue]`,
+              item.existing_floor_plan_catalogue
+            );
+          }
+          if (item.floor_plan_image instanceof File) {
+            formData2.append(
+              `floors[${index}][floor_plan_image]`,
+              item.floor_plan_image
+            );
+          } else {
+            formData2.append(
+              `floors[${index}][existing_floor_plan_image]`,
+              item.existing_floor_plan_image
+            );
+          }
+        });
+      }
+
+      // Section 9
+      formData2.append("section_9_heading", formData.section_9_heading);
+      formData2.append("section_9_description", formData.section_9_description);
+      formData2.append("section_9_image", formData.section_9_image);
+      formData2.append("section_9_image_alt", formData.section_9_image_alt);
+      formData2.append("section_9_image_text", formData.section_9_image_text);
+
+      // Section 11
+
+      if (formData.section_11_faqs) {
+        formData.section_11_faqs?.forEach((faq, index) => {
+          formData2.append(`section_11_faqs[${index}][question]`, faq.question);
+          formData2.append(`section_11_faqs[${index}][ans]`, faq.ans);
+        });
+      }
+      setIsCreating(true);
+
+      const response = await axiosClient.post(
+        `/admin/property/${editData.id}/update`,
+        formData2,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      const res = response.data;
+      console.log(res);
+
+      if (res.status == true) {
         Swal.fire("Success", res.message, "success");
         console.log(res.message, res);
         resetForm();
@@ -857,29 +867,29 @@ const UpdateProperty = () => {
         console.log(res.message);
         let errorMessage = "Something went wrong. Please try again.";
         // ✅ If validation errors are present
-  if (res.message && typeof res.message === "object") {
-    const messages = Object.values(res.message)
-      .flat() // combine arrays
-      // .join("<br>"); // format with line breaks for SweetAlert HTML
-    errorMessage = messages;
-  } else if (res.message) {
-    // fallback for simple messages
-    errorMessage = res.message;
-  }
+        if (res.message && typeof res.message === "object") {
+          const messages = Object.values(res.message)
+            .flat() // combine arrays
+          // .join("<br>"); // format with line breaks for SweetAlert HTML
+          errorMessage = messages;
+        } else if (res.message) {
+          // fallback for simple messages
+          errorMessage = res.message;
+        }
         Swal.fire({
-        icon: "error",
-        text: errorMessage,
-      });
+          icon: "error",
+          text: errorMessage,
+        });
       }
-        // Swal.fire("Success", "Blog created Successfully!", "success");
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message ||
-          "Error, Please try again.";
-        console.log(errorMessage, error);
-        // Swal.fire("Error", errorMessage, "error");
-        // setError(errorMessage);
-      } finally {
+      // Swal.fire("Success", "Blog created Successfully!", "success");
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        "Error, Please try again.";
+      console.log(errorMessage, error);
+      // Swal.fire("Error", errorMessage, "error");
+      // setError(errorMessage);
+    } finally {
       setIsCreating(false); // 👈 hide loading state
     }
     // } else {
@@ -1111,8 +1121,21 @@ const UpdateProperty = () => {
   }, []);
 
   useEffect(() => {
+    let initialPropertyTypes = [];
+    if (Array.isArray(editData?.property_types)) {
+      initialPropertyTypes = editData.property_types;
+    } else if (
+      typeof editData?.property_types === "string" &&
+      editData.property_types.trim() !== ""
+    ) {
+      initialPropertyTypes = editData.property_types
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
     setFormData((prev) => ({
       ...editData,
+      property_types: initialPropertyTypes,
       property_locations_name: editData?.property_locations_name,
       // section_1_image: [],
       broucher_file: editData?.broucher_file || "",
@@ -1588,6 +1611,24 @@ const UpdateProperty = () => {
                     </div>
                   </div>
                 </div>
+                <div className="flex justify-between items-center gap-3">
+                  <div className="w-full">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm text-gray-700">Property Types</label>
+                      <MultiSelect
+                        options={propertyTypes}
+                        value={formData.property_types}
+                        onChange={(selected) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            property_types: selected,
+                          }))
+                        }
+                        placeholder="Select Property Types"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1915,7 +1956,7 @@ const UpdateProperty = () => {
                             <input
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="image"
                               value={formData.section_1_options[i].image}
                               onChange={(e) => handleOptionChange(1, e, i)}
@@ -2176,8 +2217,8 @@ const UpdateProperty = () => {
                             <input
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
-                        value={formData.section_3_options[i].image}
+                              placeholder="Enter Image Url"
+                              value={formData.section_3_options[i].image}
                               name="image"
                               onChange={(e) => handleOptionChange(3, e, i)}
                             />
@@ -2291,7 +2332,7 @@ const UpdateProperty = () => {
                           <input
                             className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                             type="text"
-                        placeholder="Enter Image Url"
+                            placeholder="Enter Image Url"
                             value={formData.section_4_interior_images[i].image}
                             name="image"
                             onChange={(e) => handleOptionChange(4.1, e, i)}
@@ -2375,7 +2416,7 @@ const UpdateProperty = () => {
                           <input
                             className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                             type="text"
-                        placeholder="Enter Image Url"
+                            placeholder="Enter Image Url"
                             value={formData.section_4_exterior_images[i].image}
                             name="image"
                             onChange={(e) => handleOptionChange(4.2, e, i)}
@@ -2618,7 +2659,7 @@ const UpdateProperty = () => {
                             <input
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               value={formData.section_6_options[i].image}
                               name="image"
                               onChange={(e) => handleOptionChange(6, e, i)}
@@ -2832,7 +2873,7 @@ const UpdateProperty = () => {
                             <input
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               value={formData.section_7_options[i].image}
                               name="image"
                               onChange={(e) => handleOptionChange(7, e, i)}
@@ -3008,7 +3049,7 @@ const UpdateProperty = () => {
                             <input
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               value={formData.floors[i].floor_plan_image}
                               name="floor_plan_image"
                               onChange={(e) => handleOptionChange(8, e, i)}
@@ -3329,7 +3370,7 @@ const UpdateProperty = () => {
                 <input
                   className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                   type="text"
-                        placeholder="Enter Image Url"
+                  placeholder="Enter Image Url"
                   value={formData.footer_section_image_file}
                   name="footer_section_image_file"
                   onChange={handleChange}

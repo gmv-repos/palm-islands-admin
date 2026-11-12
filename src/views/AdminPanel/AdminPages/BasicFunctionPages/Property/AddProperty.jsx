@@ -9,6 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import MultiSelect from "../../../AdminComponents/Inputs/MultiSelect";
+import { propertyTypes } from "./propertyTypes";
 
 
 const validationSchema = yup.object({
@@ -108,6 +110,7 @@ const AddProperty = () => {
     schema: "", //seo
     developer_id: "",
     property_types_id: "",
+    property_types: [],
     property_locations_name: "",
     square_feet: "",
     price: "",
@@ -249,6 +252,7 @@ const AddProperty = () => {
       schema: "", //seo
       developer_id: "",
       property_types_id: "",
+      property_types: [],
       property_locations_name: "",
       square_feet: "",
       price: "",
@@ -519,6 +523,12 @@ const AddProperty = () => {
       formData2.append("developer_id", formData.developer_id);
       formData2.append("property_types_id", formData.property_types_id);
       formData2.append(
+        "property_types",
+        Array.isArray(formData.property_types)
+          ? formData.property_types.filter(Boolean).join(",")
+          : formData.property_types || ""
+      );
+      formData2.append(
         "property_locations_name",
         formData.property_locations_name
       );
@@ -764,19 +774,19 @@ const AddProperty = () => {
         console.log(res.message);
         let errorMessage = "Something went wrong. Please try again.";
         // ✅ If validation errors are present
-  if (res.message && typeof res.message === "object") {
-    const messages = Object.values(res.message)
-      .flat() // combine arrays
-      // .join("<br>"); // format with line breaks for SweetAlert HTML
-    errorMessage = messages;
-  } else if (res.message) {
-    // fallback for simple messages
-    errorMessage = res.message;
-  }
+        if (res.message && typeof res.message === "object") {
+          const messages = Object.values(res.message)
+            .flat() // combine arrays
+          // .join("<br>"); // format with line breaks for SweetAlert HTML
+          errorMessage = messages;
+        } else if (res.message) {
+          // fallback for simple messages
+          errorMessage = res.message;
+        }
         Swal.fire({
-        icon: "error",
-        text: errorMessage,
-      });
+          icon: "error",
+          text: errorMessage,
+        });
       }
       // Swal.fire("Success", "Blog created Successfully!", "success");
       // navigate("/admin/blogs");
@@ -904,7 +914,7 @@ const AddProperty = () => {
           ],
         }));
       }
-       else {
+      else {
         setFormData((prev) => ({
           ...prev,
           section_6_options: prev.section_6_options.filter(
@@ -1410,6 +1420,24 @@ const AddProperty = () => {
                     </div>
                   </div>
                 </div>
+                <div className="flex justify-between items-center gap-3">
+                  <div className="w-full">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-sm text-gray-700">Property Types</label>
+                      <MultiSelect
+                        options={propertyTypes}
+                        value={formData.property_types}
+                        onChange={(selected) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            property_types: selected,
+                          }))
+                        }
+                        placeholder="Select Property Types"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1742,7 +1770,7 @@ const AddProperty = () => {
                               required
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="image"
                               onChange={(e) => handleOptionChange(1, e, i)}
                             />
@@ -2002,7 +2030,7 @@ const AddProperty = () => {
                               required
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="image"
                               onChange={(e) => handleOptionChange(3, e, i)}
                             />
@@ -2117,7 +2145,7 @@ const AddProperty = () => {
                             required
                             className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                             type="text"
-                        placeholder="Enter Interior Image Url"
+                            placeholder="Enter Interior Image Url"
                             name="image"
                             onChange={(e) => handleOptionChange(4.1, e, i)}
                           />
@@ -2201,7 +2229,7 @@ const AddProperty = () => {
                             required
                             className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                             type="text"
-                        placeholder="Enter Exterior Image Url"
+                            placeholder="Enter Exterior Image Url"
                             name="image"
                             onChange={(e) => handleOptionChange(4.2, e, i)}
                           />
@@ -2444,7 +2472,7 @@ const AddProperty = () => {
                               required
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="image"
                               onChange={(e) => handleOptionChange(6, e, i)}
                             />
@@ -2658,7 +2686,7 @@ const AddProperty = () => {
                               required
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="image"
                               onChange={(e) => handleOptionChange(7, e, i)}
                             />
@@ -2836,7 +2864,7 @@ const AddProperty = () => {
                               required
                               className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
                               type="text"
-                        placeholder="Enter Image Url"
+                              placeholder="Enter Image Url"
                               name="floor_plan_image"
                               onChange={(e) => handleOptionChange(8, e, i)}
                             />
@@ -3129,7 +3157,7 @@ const AddProperty = () => {
                   value={formData.footer_section_title}
                   onChange={handleChange}
                   className={`rounded p-3 text-base border outline-none`}
-                  
+
                 />
               </div>
 
@@ -3143,7 +3171,7 @@ const AddProperty = () => {
                   tabIndex={1}
                   value={formData.footer_section_description}
                   onChange={(newContent) =>
-                    handleDescriptionChange(newContent,  9)
+                    handleDescriptionChange(newContent, 9)
                   }
                 />
               </div>
@@ -3156,14 +3184,14 @@ const AddProperty = () => {
                 </label>
                 <input
                   type="text"
-                        placeholder="Enter Footer Image Url"
+                  placeholder="Enter Footer Image Url"
                   name="footer_section_image_file"
                   onChange={handleChange}
                   className="rounded p-3 text-gray-500 text-base border outline-none border-gray-300 w-full"
-                  
-                  // {...methods.register("footer_section_image_file")}
+
+                // {...methods.register("footer_section_image_file")}
                 />
-                
+
               </div>
               <div className="flex flex-col">
                 <label className="mb-1 text-sm font-medium text-gray-700">
@@ -3175,7 +3203,7 @@ const AddProperty = () => {
                   name="footer_section_image_alt"
                   value={formData.footer_section_image_alt}
                   onChange={handleChange}
-                  
+
                   className="rounded p-3 border border-gray-300 outline-none"
                 />
               </div>
@@ -3189,7 +3217,7 @@ const AddProperty = () => {
                   value={formData.footer_section_image_text}
                   name="footer_section_image_text"
                   onChange={handleChange}
-                  
+
                   className="rounded p-3 border border-gray-300 outline-none"
                 />
               </div>
@@ -3204,7 +3232,7 @@ const AddProperty = () => {
                   name="footer_section_btn_1_text"
                   value={formData.footer_section_btn_1_text}
                   onChange={handleChange}
-                  
+
                   // {...methods.register("footer_section_btn_1_text")}
                   className="rounded p-3 border border-gray-300 outline-none"
                 />
@@ -3218,7 +3246,7 @@ const AddProperty = () => {
                   name="footer_section_btn_1_link"
                   value={formData.footer_section_btn_1_link}
                   onChange={handleChange}
-                  
+
                   // {...methods.register("footer_section_btn_1_link")}
                   className="rounded p-3 border border-gray-300 outline-none"
                 />
@@ -3232,7 +3260,7 @@ const AddProperty = () => {
                   name="footer_section_btn_2_text"
                   value={formData.footer_section_btn_2_text}
                   onChange={handleChange}
-                  
+
                   placeholder="footer Btn 2 text"
                   className="rounded p-3 border border-gray-300 outline-none"
                 />
@@ -3245,7 +3273,7 @@ const AddProperty = () => {
                   name="footer_section_btn_2_link"
                   value={formData.footer_section_btn_2_link}
                   onChange={handleChange}
-                  
+
                   // {...methods.register("footer_section_btn_2_link")}
                   placeholder="footer Btn 2 link"
                   className="rounded p-3 border border-gray-300 outline-none"
