@@ -20,7 +20,7 @@ const FaqList = () => {
     { name: "Contact Us", id: "1" },
     { name: "Palm Jumeirah", id: "16" },
     { name: "Palm Jebel Ali", id: "7" },
-    { name: "Dubai Island", id: "11" },
+    { name: "Dubai Islands", id: "11" },
     { name: "Developer List", id: "5" },
     { name: "List You Property", id: "6" },
     { name: "FAQ Page", id: "2" },
@@ -112,6 +112,7 @@ const FaqList = () => {
               <tr className="bg-[#5DAABA] text-white text-left">
                 <th className="border border-gray-300 p-3">S.no</th>
                 <th className="border border-gray-300 p-3">Page</th>
+                <th className="border border-gray-300 p-3">Question</th>
                 <th className="border border-gray-300 p-3">Faq Category</th>
                 <th className="border border-gray-300 p-3">Status</th>
                 <th className="border border-gray-300 p-3">Action</th>
@@ -125,6 +126,7 @@ const FaqList = () => {
                     <td className="border border-gray-300 p-2 overflow-hidden">
                       {pages.find((page) => page.id === String(data.page_id))?.name || "N/A"}
                     </td>
+                    <td className="border border-gray-300 p-2">{data?.question}</td>
                     <td className="border border-gray-300 p-2 overflow-hidden">
                       {data?.category?.name || "None"}
                     </td>

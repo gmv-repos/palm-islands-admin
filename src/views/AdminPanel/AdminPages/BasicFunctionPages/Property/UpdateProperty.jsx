@@ -1079,7 +1079,7 @@ const UpdateProperty = () => {
       id: "2",
     },
     {
-      name: "Dubai Island",
+      name: "Dubai Islands",
       id: "3",
     },
   ];

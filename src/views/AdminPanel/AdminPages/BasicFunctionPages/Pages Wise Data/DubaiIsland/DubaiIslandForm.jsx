@@ -714,7 +714,7 @@ const DubaiIslandForm = ({ editData, setStatus, setEditData, fetchData }) => {
 
   return (
     <div className="max-w-7xl mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-3xl mb-4 font-semibold">Dubai Island Page</h2>
+      <h2 className="text-3xl mb-4 font-semibold">Dubai Islands Page</h2>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-6">
           <SEOFields />

@@ -22,7 +22,7 @@ import { useLocation, useNavigate } from "react-router-dom";
   { name: "Contact Us", id: "1" },
   { name: "Palm Jumeirah", id: "16" },
   { name: "Palm Jebel Ali", id: "7" },
-  { name: "Dubai Island", id: "11" },
+  { name: "Dubai Islands", id: "11" },
   { name: "Developer List", id: "5" },
   { name: "List You Property", id: "6" },
   { name: "FAQ Page", id: "2" },

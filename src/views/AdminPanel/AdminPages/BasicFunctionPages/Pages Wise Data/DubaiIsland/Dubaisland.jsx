@@ -40,7 +40,7 @@ const DubaiIsland = () => {
       {status === 1 ? (
         <div className="bg-white flex flex-col gap-10 shadow-md rounded-lg p-6 mb-6">
           <div className="w-full flex justify-between">
-            <h2 className="text-3xl font-bold font-palm">Dubai Island Page</h2>
+            <h2 className="text-3xl font-bold font-palm">Dubai Islands Page</h2>
           </div>
 
           {about ? (

@@ -212,7 +212,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             { to: "/admin/list-your-property-page", label: "List Property", },
             { to: "/admin/contactus-page", label: "Contact Us", },
             { to: "/admin/home-page", label: "Home", },
-            { to: "/admin/dubai-island", label: "Dubai Island", },
+            { to: "/admin/dubai-island", label: "Dubai Islands", },
             { to: "/admin/palm-jumeirah", label: "Palm Jumeirah", },
             { to: "/admin/palm-jebel-ali", label: "Palm Jebel Ali", },
             { to: "/admin/new-developments", label: "New Development", },
