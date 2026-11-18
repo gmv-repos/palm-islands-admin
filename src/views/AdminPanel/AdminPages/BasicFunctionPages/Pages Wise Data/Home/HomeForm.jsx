@@ -26,8 +26,8 @@ const schema = yup.object().shape({
     yup.object().shape({
       file_path: yup.mixed(),
       existingPath: yup.string(),
-      alt: yup.string().required(),
-      name: yup.string().required(),
+      alt: yup.string().nullable(),
+      name: yup.string().nullable(),
     })
   ),
 
@@ -40,8 +40,8 @@ const schema = yup.object().shape({
   sectionOne_image: yup.object().shape({
     file_path: yup.mixed(),
     existingPath: yup.string(),
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
   }),
   sectionOne_items: yup.array().of(
     yup.object().shape({
@@ -49,8 +49,8 @@ const schema = yup.object().shape({
       image: yup.object().shape({
         file_path: yup.mixed(),
         existingPath: yup.string(),
-        alt: yup.string().required(),
-        name: yup.string().required(),
+        alt: yup.string().nullable(),
+        name: yup.string().nullable(),
       }),
     })
   ),
@@ -64,8 +64,8 @@ const schema = yup.object().shape({
       image: yup.object().shape({
         file_path: yup.mixed(),
         existingPath: yup.string(),
-        alt: yup.string().required(),
-        name: yup.string().required(),
+        alt: yup.string().nullable(),
+        name: yup.string().nullable(),
       }),
     })
   ),
@@ -82,8 +82,8 @@ const schema = yup.object().shape({
   sectionFive_image: yup.object().shape({
     file_path: yup.mixed(),
     existingPath: yup.string(),
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
   }),
 
   sectionSix_heading: yup.string().required(),
@@ -93,8 +93,8 @@ const schema = yup.object().shape({
   sectionSix_image: yup.object().shape({
     file_path: yup.mixed(),
     existingPath: yup.string(),
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
   }),
 
   sectionSeven_heading: yup.string().required(),
@@ -109,8 +109,8 @@ const schema = yup.object().shape({
   sectionSeven_image: yup.object().shape({
     file_path: yup.mixed(),
     existingPath: yup.string(),
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
   }),
 
   sectionEight_heading: yup.string().required(),
@@ -155,8 +155,8 @@ const schema = yup.object().shape({
       t: yup.string().required(),
       existingPath: yup.string(),
       file_path: yup.mixed(),
-      alt: yup.string().required(),
-      name: yup.string().required(),
+      alt: yup.string().nullable(),
+      name: yup.string().nullable(),
     })
   ),
 });
@@ -307,11 +307,11 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
             : {};
            formattedData.sectionOne_items =  data.items?.map((items) => ({
             heading: items.heading || "",
-            image: page.image
+            image: items.image
                 ? {
-                  existingPath: page.image.file_path || "",
-                  alt: page.image.alt || "",
-                  name: page.image.name || "",
+                  existingPath: items.image.file_path || "",
+                  alt: items.image.alt || "",
+                  name: items.image.name || "",
                 }
                 : {},
            }))
@@ -474,8 +474,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
           img.existingPath || ""
         );
       }
-      formData.append(`banner[images][${index}][alt]`, img.alt);
-      formData.append(`banner[images][${index}][name]`, img.name);
+      formData.append(`banner[images][${index}][alt]`, img.alt || "");
+      formData.append(`banner[images][${index}][name]`, img.name || "");
     });
 
     formData.append("footer_section_title", data.footer_section_title);
@@ -498,8 +498,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
           img.existingPath || ""
         );
       }
-      formData.append(`footer_section_image[alt]`, img.alt);
-      formData.append(`footer_section_image[name]`, img.name);
+      formData.append(`footer_section_image[alt]`, img.alt || "");
+      formData.append(`footer_section_image[name]`, img.name || "");
     });
 
     // Section One
@@ -516,8 +516,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
         data.sectionOne_image.existingPath || ""
       );
     }
-    formData.append("sectionOne[image][alt]", data.sectionOne_image.alt);
-    formData.append("sectionOne[image][name]", data.sectionOne_image.name);
+    formData.append("sectionOne[image][alt]", data.sectionOne_image.alt || "");
+    formData.append("sectionOne[image][name]", data.sectionOne_image.name || "");
     data.sectionOne_items.forEach((item , index) => {
       formData.append(`sectionOne[items][${index}][heading]` ,  item.heading);
        if (item?.image?.file_path?.[0]) {
@@ -533,11 +533,11 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
       }
       formData.append(
         `sectionOne[items][${index}][image][alt]`,
-        item.image.alt
+        item.image.alt || ""
       );
       formData.append(
         `sectionOne[items][${index}][image][name]`,
-        item.image.name
+        item.image.name || ""
       );
     })
     // Section Two Pages
@@ -559,11 +559,11 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
       }
       formData.append(
         `sectionTwo[pages][${index}][image][alt]`,
-        page.image.alt
+        page.image.alt || ""
       );
       formData.append(
         `sectionTwo[pages][${index}][image][name]`,
-        page.image.name
+        page.image.name || ""
       );
     });
 
@@ -595,8 +595,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
         data.sectionFive_image.existingPath || ""
       );
     }
-    formData.append("sectionFive[image][alt]", data.sectionFive_image.alt);
-    formData.append("sectionFive[image][name]", data.sectionFive_image.name);
+    formData.append("sectionFive[image][alt]", data.sectionFive_image.alt || "");
+    formData.append("sectionFive[image][name]", data.sectionFive_image.name || "");
 
     // Section Six
     formData.append("sectionSix[heading]", data.sectionSix_heading);
@@ -614,8 +614,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
         data.sectionSix_image.existingPath || ""
       );
     }
-    formData.append("sectionSix[image][alt]", data.sectionSix_image.alt);
-    formData.append("sectionSix[image][name]", data.sectionSix_image.name);
+    formData.append("sectionSix[image][alt]", data.sectionSix_image.alt || "");
+    formData.append("sectionSix[image][name]", data.sectionSix_image.name || "");
 
     // Section Seven
     formData.append("sectionSeven[heading]", data.sectionSeven_heading);
@@ -639,8 +639,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
         data.sectionSeven_image.existingPath || ""
       );
     }
-    formData.append("sectionSeven[image][alt]", data.sectionSeven_image.alt);
-    formData.append("sectionSeven[image][name]", data.sectionSeven_image.name);
+    formData.append("sectionSeven[image][alt]", data.sectionSeven_image.alt || "");
+    formData.append("sectionSeven[image][name]", data.sectionSeven_image.name || "");
 
     // Section Eight
     formData.append("sectionEight[heading]", data.sectionEight_heading);
@@ -674,8 +674,8 @@ const HomeForm = ({ editData, setStatus, setEditData, fetchData }) => {
           img.existingPath || ""
         );
       }
-      formData.append(`sectionNine[images][${index}][alt]`, img.alt);
-      formData.append(`sectionNine[images][${index}][name]`, img.name);
+      formData.append(`sectionNine[images][${index}][alt]`, img.alt || "");
+      formData.append(`sectionNine[images][${index}][name]`, img.name || "");
     });
 
     return formData;

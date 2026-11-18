@@ -39,8 +39,8 @@ const schema = yup.object().shape({
     .required(),
   location: yup.string().required(),
   main_image: yup.object().shape({
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
     file: yup
       .mixed()
       .required("Main image file is required")
@@ -82,8 +82,8 @@ const schema = yup.object().shape({
 
 
   s2_image: yup.object().shape({
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
     file: yup
       .mixed()
       .required("Main image file is required")
@@ -105,8 +105,8 @@ const schema = yup.object().shape({
   }),
   s2_images: yup.array().of(
     yup.object().shape({
-      name: yup.string().required(),
-      alt: yup.string().required(),
+      name: yup.string().nullable(),
+      alt: yup.string().nullable(),
       file: yup
         .mixed()
         .required("Main image file is required")
@@ -131,8 +131,8 @@ const schema = yup.object().shape({
 
   s4_heading: yup.string().required(),
   s4_image: yup.object().shape({
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
     file: yup
       .mixed()
       .required("Main image file is required")
@@ -156,8 +156,8 @@ const schema = yup.object().shape({
     yup.object().shape({
       name: yup.string().required(),
       text: yup.string().required(),
-      alt: yup.string().required(),
-      alt_name: yup.string().required(),
+      alt: yup.string().nullable(),
+      alt_name: yup.string().nullable(),
       file: yup
         .mixed()
         .required("Main image file is required")
@@ -183,8 +183,8 @@ const schema = yup.object().shape({
   s5_items: yup.array().of(
     yup.object().shape({
       name: yup.string().required(),
-      alt: yup.string().required(),
-      alt_name: yup.string().required(),
+      alt: yup.string().nullable(),
+      alt_name: yup.string().nullable(),
       text: yup.string().required(),
       file: yup
         .mixed()
@@ -214,8 +214,8 @@ const schema = yup.object().shape({
   s7_heading: yup.string().required(),
   s7_description: yup.string().required(),
   s7_image: yup.object().shape({
-    alt: yup.string().required(),
-    name: yup.string().required(),
+    alt: yup.string().nullable(),
+    name: yup.string().nullable(),
     file: yup
       .mixed()
       .required("Main image file is required")
@@ -240,8 +240,8 @@ const schema = yup.object().shape({
   s8_items: yup.array().of(
     yup.object().shape({
       name: yup.string().required(),
-      alt: yup.string().required(),
-      alt_name: yup.string().required(),
+      alt: yup.string().nullable(),
+      alt_name: yup.string().nullable(),
       text: yup.string().required(),
       file: yup
         .mixed()
@@ -354,8 +354,8 @@ const CreateDeveloper = () => {
       }
 
       //  main_image
-      formData.append("main_image[alt]", data.main_image.alt);
-      formData.append("main_image[name]", data.main_image.name);
+      formData.append("main_image[alt]", data.main_image.alt || "");
+      formData.append("main_image[name]", data.main_image.name || "");
       formData.append("main_image[file]", data.main_image.file[0]);
 
       //  Section 1
@@ -366,14 +366,14 @@ const CreateDeveloper = () => {
       //  Section 2
       formData.append("s2_heading", data.s2_heading);
       formData.append("s2_description", data.s2_description);
-      formData.append("s2_image[alt]", data.s2_image.alt);
-      formData.append("s2_image[name]", data.s2_image.name);
+      formData.append("s2_image[alt]", data.s2_image.alt || "");
+      formData.append("s2_image[name]", data.s2_image.name || "");
       formData.append("s2_image[file]", data.s2_image.file[0]);
 
       if (data.s2_images) {
         data.s2_images?.forEach((item, index) => {
-          formData.append(`s2_images[${index}][alt]`, item.alt);
-          formData.append(`s2_images[${index}][name]`, item.name);
+          formData.append(`s2_images[${index}][alt]`, item.alt || "");
+          formData.append(`s2_images[${index}][name]`, item.name || "");
           formData.append(`s2_images[${index}][file]`, item.file[0]);
         });
       }
@@ -382,16 +382,16 @@ const CreateDeveloper = () => {
 
       //  Section 4
       formData.append("s4_heading", data.s4_heading);
-      formData.append("s4_image[alt]", data.s4_image.alt);
-      formData.append("s4_image[name]", data.s4_image.name);
+      formData.append("s4_image[alt]", data.s4_image.alt || "");
+      formData.append("s4_image[name]", data.s4_image.name || "");
       formData.append(`s4_image[file]`, data.s4_image.file[0]);
 
       if (data.s4_items) {
         data.s4_items?.forEach((item, index) => {
           formData.append(`s4_items[${index}][name]`, item.name);
           formData.append(`s4_items[${index}][text]`, item.text);
-          formData.append(`s4_items[${index}][alt]`, item.alt);
-          formData.append(`s4_items[${index}][alt_name]`, item.alt_name);
+          formData.append(`s4_items[${index}][alt]`, item.alt || "");
+          formData.append(`s4_items[${index}][alt_name]`, item.alt_name || "");
           formData.append(`s4_items[${index}][file]`, item.file[0]);
         });
       }
@@ -404,8 +404,8 @@ const CreateDeveloper = () => {
         data.s5_items?.forEach((item, index) => {
           formData.append(`s5_items[${index}][name]`, item.name);
           formData.append(`s5_items[${index}][text]`, item.text);
-          formData.append(`s5_items[${index}][alt]`, item.alt);
-          formData.append(`s5_items[${index}][alt_name]`, item.alt_name);
+          formData.append(`s5_items[${index}][alt]`, item.alt || "");
+          formData.append(`s5_items[${index}][alt_name]`, item.alt_name || "");
           formData.append(`s5_items[${index}][file]`, item.file[0]);
         });
       }
@@ -430,8 +430,8 @@ const CreateDeveloper = () => {
         data.s8_items?.forEach((item, index) => {
           formData.append(`s8_items[${index}][name]`, item.name);
           formData.append(`s8_items[${index}][text]`, item.text);
-          formData.append(`s8_items[${index}][alt]`, item.alt);
-          formData.append(`s8_items[${index}][alt_name]`, item.alt_name);
+          formData.append(`s8_items[${index}][alt]`, item.alt || "");
+          formData.append(`s8_items[${index}][alt_name]`, item.alt_name || "");
           formData.append(`s8_items[${index}][file]`, item.file[0]);
         });
       }
@@ -689,9 +689,7 @@ const CreateDeveloper = () => {
           </label>
           <input
             placeholder="Main Image Alt"
-            {...register("main_image.alt", {
-              required: "Alt text is required",
-            })}
+            {...register("main_image.alt")}
             className={`rounded p-3 text-base border ${errors?.main_image?.alt ? "border-red-500" : "border-gray-300"
               } outline-none`}
           />
@@ -709,9 +707,7 @@ const CreateDeveloper = () => {
           </label>
           <input
             placeholder="Main Image Name"
-            {...register("main_image.name", {
-              required: "Image name is required",
-            })}
+            {...register("main_image.name")}
             className={`rounded p-3 text-base border ${errors?.main_image?.name ? "border-red-500" : "border-gray-300"
               } outline-none`}
           />
@@ -853,9 +849,7 @@ const CreateDeveloper = () => {
           </label>
           <input
             placeholder="Image Alt"
-            {...register("s2_image.alt", {
-              required: "Image alt text is required",
-            })}
+            {...register("s2_image.alt")}
             className={`rounded p-3 text-base border ${errors?.s2_image?.alt ? "border-red-500" : "border-gray-300"
               } outline-none`}
           />
@@ -872,9 +866,7 @@ const CreateDeveloper = () => {
           </label>
           <input
             placeholder="Image Name"
-            {...register("s2_image.name", {
-              required: "Image name is required",
-            })}
+            {...register("s2_image.name")}
             className={`rounded p-3 text-base border ${errors?.s2_image?.name ? "border-red-500" : "border-gray-300"
               } outline-none`}
           />
@@ -914,9 +906,7 @@ const CreateDeveloper = () => {
               Image {index + 1} Name
             </label>
             <input
-              {...register(`s2_images.${index}.name`, {
-                required: "Image name is required",
-              })}
+              {...register(`s2_images.${index}.name`)}
               placeholder={`Image ${index + 1} Name`}
               className={`rounded p-3 text-base border ${errors?.s2_images?.[index]?.name
                 ? "border-red-500"
@@ -935,9 +925,7 @@ const CreateDeveloper = () => {
               Image {index + 1} Alt
             </label>
             <input
-              {...register(`s2_images.${index}.alt`, {
-                required: "Image alt is required",
-              })}
+              {...register(`s2_images.${index}.alt`)}
               placeholder={`Image ${index + 1} Alt`}
               className={`rounded p-3 text-base border ${errors?.s2_images?.[index]?.alt
                 ? "border-red-500"
@@ -1048,7 +1036,7 @@ const CreateDeveloper = () => {
           <input
             id="s4_image_alt"
             placeholder="Image Alt"
-            {...register("s4_image.alt", { required: "Image alt is required" })}
+            {...register("s4_image.alt")}
             className={`rounded p-3 text-base border outline-none w-full ${errors?.s4_image?.alt ? "border-red-500" : "border-gray-300"
               }`}
           />
@@ -1069,9 +1057,7 @@ const CreateDeveloper = () => {
           <input
             id="s4_image_name"
             placeholder="Image Name"
-            {...register("s4_image.name", {
-              required: "Image name is required",
-            })}
+            {...register("s4_image.name")}
             className={`rounded p-3 text-base border outline-none w-full ${errors?.s4_image?.name ? "border-red-500" : "border-gray-300"
               }`}
           />
@@ -1169,9 +1155,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s4_items.${i}.alt_name`}
                 placeholder="Image alt_name"
-                {...register(`s4_items.${i}.alt_name`, {
-                  required: "Image Name is required",
-                })}
+                {...register(`s4_items.${i}.alt_name`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s4_items?.[i]?.alt_name
                   ? "border-red-500"
                   : "border-gray-300"
@@ -1194,9 +1178,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s4_items.${i}.alt`}
                 placeholder="Image Alt"
-                {...register(`s4_items.${i}.alt`, {
-                  required: "Image alt is required",
-                })}
+                {...register(`s4_items.${i}.alt`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s4_items?.[i]?.alt
                   ? "border-red-500"
                   : "border-gray-300"
@@ -1399,9 +1381,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s5_items_alt_name_${i}`}
                 placeholder="Image Name"
-                {...register(`s5_items.${i}.alt_name`, {
-                  required: "Image Name is required",
-                })}
+                {...register(`s5_items.${i}.alt_name`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s5_items?.[i]?.alt_name
                   ? "border-red-500"
                   : "border-gray-300"
@@ -1424,9 +1404,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s5_items_alt_${i}`}
                 placeholder="Image Alt"
-                {...register(`s5_items.${i}.alt`, {
-                  required: "Image alt is required",
-                })}
+                {...register(`s5_items.${i}.alt`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s5_items?.[i]?.alt
                   ? "border-red-500"
                   : "border-gray-300"
@@ -1609,7 +1587,7 @@ const CreateDeveloper = () => {
           <input
             id="s7_image_alt"
             placeholder="Image Alt"
-            {...register("s7_image.alt", { required: "Image alt is required" })}
+            {...register("s7_image.alt")}
             className={`rounded p-3 text-base border outline-none w-full ${errors?.s7_image?.alt ? "border-red-500" : "border-gray-300"
               }`}
           />
@@ -1630,9 +1608,7 @@ const CreateDeveloper = () => {
           <input
             id="s7_image_name"
             placeholder="Image Name"
-            {...register("s7_image.name", {
-              required: "Image name is required",
-            })}
+            {...register("s7_image.name")}
             className={`rounded p-3 text-base border outline-none w-full ${errors?.s7_image?.name ? "border-red-500" : "border-gray-300"
               }`}
           />
@@ -1759,9 +1735,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s8_items.${i}.alt_name`}
                 placeholder="Image Name"
-                {...register(`s8_items.${i}.alt_name`, {
-                  required: "Image name is required",
-                })}
+                {...register(`s8_items.${i}.alt_name`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s8_items?.[i]?.alt_name
                   ? "border-red-500"
                   : "border-gray-300"
@@ -1784,9 +1758,7 @@ const CreateDeveloper = () => {
               <input
                 id={`s8_items.${i}.alt`}
                 placeholder="Image Alt"
-                {...register(`s8_items.${i}.alt`, {
-                  required: "Image alt is required",
-                })}
+                {...register(`s8_items.${i}.alt`)}
                 className={`rounded p-3 text-base border outline-none w-full ${errors?.s8_items?.[i]?.alt
                   ? "border-red-500"
                   : "border-gray-300"

@@ -36,8 +36,8 @@
 
 | Field | Type | Required |
 |-------|------|----------|
-| main_image[alt] | text | Yes |
-| main_image[name] | text | Yes |
+| main_image[alt] | text | No |
+| main_image[name] | text | No |
 | main_image[file] | file | Yes |
 
 ### Section 1
